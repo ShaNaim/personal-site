@@ -1,1 +1,2 @@
-export type { PaginatedResponse, ApiError } from './api'
+export * from "./portfolio";
+export type { PaginatedResponse, ApiError } from "./api";
