@@ -11,9 +11,9 @@ function Index() {
     <div className="relative min-h-screen w-full overflow-hidden bg-background flex items-center justify-center px-4">
       {/* Ambient background blobs */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -left-40 h-[600px] w-[600px] rounded-full opacity-20 dark:opacity-10 blur-3xl" style={{ background: "radial-gradient(circle, #6366f1, transparent 70%)" }} />
-        <div className="absolute -bottom-40 -right-40 h-[500px] w-[500px] rounded-full opacity-15 dark:opacity-10 blur-3xl" style={{ background: "radial-gradient(circle, #8b5cf6, transparent 70%)" }} />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[400px] w-[400px] rounded-full opacity-10 blur-3xl" style={{ background: "radial-gradient(circle, #a78bfa, transparent 70%)" }} />
+        <div className="absolute -top-40 -left-40 h-150 w-150 rounded-full opacity-20 dark:opacity-10 blur-3xl" style={{ background: "radial-gradient(circle, #6366f1, transparent 70%)" }} />
+        <div className="absolute -bottom-40 -right-40 h-125 w-125 rounded-full opacity-15 dark:opacity-10 blur-3xl" style={{ background: "radial-gradient(circle, #8b5cf6, transparent 70%)" }} />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-100 w-100 rounded-full opacity-10 blur-3xl" style={{ background: "radial-gradient(circle, #a78bfa, transparent 70%)" }} />
       </div>
 
       {/* Subtle grid overlay */}
@@ -47,7 +47,7 @@ function Index() {
           </div>
 
           {/* Divider */}
-          <div className="h-px bg-gradient-to-r from-transparent via-border to-transparent" />
+          <div className="h-px bg-linear-to-r from-transparent via-border to-transparent" />
 
           {/* Form */}
           <ExampleForm />
