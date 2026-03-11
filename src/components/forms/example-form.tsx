@@ -2,6 +2,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
+import type { FieldErrors } from "react-hook-form";
+import { notifyFormError } from "@/lib/handlers";
 
 const schema = z.object({
   email: z.string().email("Invalid email address"),
@@ -22,6 +24,10 @@ export function ExampleForm() {
   const onSubmit = (data: FormData) => {
     console.log("Form data:", data);
   };
+  const onError = (errors: FieldErrors<FormData>) => {
+    console.log("Form errors:", errors);
+    notifyFormError(errors);
+  };
 
   return (
     <div className="flex flex-col gap-4 w-full max-w-sm">
@@ -35,7 +41,7 @@ export function ExampleForm() {
         {errors.password && <span className="text-red-500 text-xs">{errors.password.message}</span>}
       </div>
 
-      <Button onClick={handleSubmit(onSubmit)} disabled={isSubmitting}>
+      <Button onClick={handleSubmit(onSubmit, onError)} disabled={isSubmitting}>
         Submit
       </Button>
     </div>
