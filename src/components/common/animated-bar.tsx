@@ -15,26 +15,21 @@ export function AnimatedBar({ level, color, delay = 0 }: AnimatedBarProps) {
     if (inView) {
       const t = setTimeout(() => setWidth(level), delay);
       return () => clearTimeout(t);
+    } else {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setWidth(0);
     }
   }, [inView, level, delay]);
 
   return (
-    <div
-      ref={ref}
-      style={{
-        height: "3px",
-        background: "var(--color-stroke)",
-        borderRadius: "2px",
-        overflow: "hidden",
-      }}
-    >
+    <div ref={ref} className="h-[3px] w-full bg-[var(--color-stroke)] rounded-[2px] overflow-hidden">
       <div
+        className="h-full transition-all duration-1000 ease-[cubic-bezier(0.4,0,0.2,1)]"
         style={{
-          height: "100%",
           width: `${width}%`,
           background: color,
-          transition: "width 1s cubic-bezier(0.4,0,0.2,1)",
-          boxShadow: `0 0 8px ${color}80`,
+          // Using 50 hex alpha for the glow (equivalent to 80 in your original CSS)
+          boxShadow: `0 0 8px ${color}50`,
         }}
       />
     </div>

@@ -1,12 +1,13 @@
 interface DividerProps {
+  className?: string;
   style?: React.CSSProperties;
 }
 
-export function Divider({ style }: DividerProps) {
+export function Divider({ className, style }: DividerProps) {
   return (
     <div
+      className={`h-px ${className ?? ""}`}
       style={{
-        height: "1px",
         background: "linear-gradient(90deg, var(--color-brand), var(--color-brand-dim), transparent)",
         ...style,
       }}
