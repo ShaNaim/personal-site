@@ -3,55 +3,22 @@ import { hobbies } from "@/data/portfolio/personal";
 
 export function HobbiesSection() {
   return (
-    <section
-      style={{
-        padding: "80px 48px",
-        background: "var(--color-bg)",
-      }}
-    >
-      <div style={{ maxWidth: 900, margin: "0 auto" }}>
+    <section className="py-20 px-12 bg-[var(--color-bg)]">
+      <div className="max-w-[900px] mx-auto">
         <FadeIn>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-              gap: 1,
-              background: "var(--color-stroke-subtle)",
-            }}
-          >
+          {/* Grid Border Trick: 
+            Using gap-px (1px) with a subtle background color 
+            makes the gap look like a thin internal border.
+          */}
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-px bg-[var(--color-stroke-subtle)] border border-[var(--color-stroke-subtle)]">
             {hobbies.map(({ icon, label, desc }) => (
-              <div
-                key={label}
-                style={{
-                  background: "var(--color-bg)",
-                  padding: "32px 24px",
-                  textAlign: "center",
-                  transition: "background 0.2s",
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = "var(--color-bg-card)")}
-                onMouseLeave={(e) => (e.currentTarget.style.background = "var(--color-bg)")}
-              >
-                <div style={{ fontSize: 28, marginBottom: 10 }}>{icon}</div>
-                <div
-                  style={{
-                    fontFamily: "'Bebas Neue', sans-serif",
-                    fontSize: 17,
-                    letterSpacing: "0.1em",
-                    marginBottom: 4,
-                    color: "var(--color-text)",
-                  }}
-                >
-                  {label}
-                </div>
-                <div
-                  style={{
-                    fontSize: 11,
-                    color: "var(--color-text-faint)",
-                    letterSpacing: "0.05em",
-                  }}
-                >
-                  {desc}
-                </div>
+              <div key={label} className="group bg-[var(--color-bg)] py-8 px-6 text-center transition-colors duration-200 hover:bg-[var(--color-bg-card)]">
+                {/* Icon with subtle lift on hover */}
+                <div className="text-[28px] mb-2.5 transition-transform duration-300 group-hover:-translate-y-1">{icon}</div>
+
+                <h4 className="font-['Bebas_Neue'] text-[17px] tracking-[0.1em] text-[var(--color-text)] mb-1 uppercase">{label}</h4>
+
+                <p className="text-[11px] text-[var(--color-text-faint)] tracking-wider leading-relaxed">{desc}</p>
               </div>
             ))}
           </div>
