@@ -9,13 +9,13 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as PortfolioRouteImport } from './routes/portfolio'
+import { Route as PortfolioSourceRouteImport } from './routes/portfolio-source'
 import { Route as ExamplesRouteImport } from './routes/examples'
 import { Route as IndexRouteImport } from './routes/index'
 
-const PortfolioRoute = PortfolioRouteImport.update({
-  id: '/portfolio',
-  path: '/portfolio',
+const PortfolioSourceRoute = PortfolioSourceRouteImport.update({
+  id: '/portfolio-source',
+  path: '/portfolio-source',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ExamplesRoute = ExamplesRouteImport.update({
@@ -32,40 +32,40 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/examples': typeof ExamplesRoute
-  '/portfolio': typeof PortfolioRoute
+  '/portfolio-source': typeof PortfolioSourceRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/examples': typeof ExamplesRoute
-  '/portfolio': typeof PortfolioRoute
+  '/portfolio-source': typeof PortfolioSourceRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/examples': typeof ExamplesRoute
-  '/portfolio': typeof PortfolioRoute
+  '/portfolio-source': typeof PortfolioSourceRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/examples' | '/portfolio'
+  fullPaths: '/' | '/examples' | '/portfolio-source'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/examples' | '/portfolio'
-  id: '__root__' | '/' | '/examples' | '/portfolio'
+  to: '/' | '/examples' | '/portfolio-source'
+  id: '__root__' | '/' | '/examples' | '/portfolio-source'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ExamplesRoute: typeof ExamplesRoute
-  PortfolioRoute: typeof PortfolioRoute
+  PortfolioSourceRoute: typeof PortfolioSourceRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/portfolio': {
-      id: '/portfolio'
-      path: '/portfolio'
-      fullPath: '/portfolio'
-      preLoaderRoute: typeof PortfolioRouteImport
+    '/portfolio-source': {
+      id: '/portfolio-source'
+      path: '/portfolio-source'
+      fullPath: '/portfolio-source'
+      preLoaderRoute: typeof PortfolioSourceRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/examples': {
@@ -88,7 +88,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ExamplesRoute: ExamplesRoute,
-  PortfolioRoute: PortfolioRoute,
+  PortfolioSourceRoute: PortfolioSourceRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
