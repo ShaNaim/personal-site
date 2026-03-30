@@ -1,7 +1,7 @@
 import { FadeIn } from "@/components/common/fade-in";
 import { SectionLabel } from "@/components/common/section-label";
 import { SkillCategory } from "@/components/templates/skill-category";
-import { skills } from "@/data/portfolio/skills";
+import { skills, SKILL_LEGEND } from "@/data/portfolio/skills";
 
 export function SkillsSection() {
   return (
@@ -31,6 +31,17 @@ export function SkillsSection() {
             <FadeIn key={category} delay={ci * 100}>
               <SkillCategory category={category} items={items} animationIndexOffset={ci} />
             </FadeIn>
+          ))}
+        </div>
+        <div className="mt-20 pt-8 border-t border-(--color-stroke-subtle) flex flex-wrap gap-x-8 gap-y-3  transition-opacity duration-500">
+          {SKILL_LEGEND.map(({ range, fun, pro }) => (
+            <div key={range} className="group w-52 flex items-center gap-2 opacity-40 hover:opacity-100">
+              <span className="text-[8px] text-(--color-brand)">●</span>
+              <span className="inline-block text-(--size-section-label) tracking-widest uppercase text-(--color-text-dim)">
+                {range} <span className="group-hover:hidden">{fun}</span>
+                <span className="hidden group-hover:inline text-(--color-text-muted)">{pro}</span>
+              </span>
+            </div>
           ))}
         </div>
       </div>

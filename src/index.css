@@ -293,3 +293,15 @@ button {
   border-color: var(--color-stroke-mid);
   color: var(--color-text-muted);
 }
+
+@keyframes reveal {
+  from {
+    transform: translateY(110%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+.animate-reveal {
+  animation: reveal 1.2s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+}

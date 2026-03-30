@@ -6,7 +6,7 @@ import { heroStats } from "@/data/portfolio/personal";
 
 export function HeroSection() {
   return (
-    <section id="home" className="relative min-h-screen flex flex-col justify-center px-12 pt-[120px] pb-20 overflow-hidden">
+    <section id="home" className="relative min-h-screen flex flex-col justify-center px-24 pt-[120px] pb-20 overflow-hidden">
       {/* Grid background - Pure CSS Logic via Tailwind arbitrary values */}
       <div
         className="absolute inset-0 opacity-[0.03] pointer-events-none"
@@ -31,10 +31,15 @@ export function HeroSection() {
         </FadeIn>
 
         {/* Name */}
-        <FadeIn delay={100}>
-          <div className="font-['Bebas_Neue'] text-[72px] md:text-[12vw] lg:text-[160px] leading-[0.9] text-[var(--color-text)] animate-float">SHANAIM</div>
-          <div className="font-['Bebas_Neue'] text-[72px] md:text-[12vw] lg:text-[160px] leading-[0.9] text-transparent" style={{ WebkitTextStroke: "1px var(--color-text)" }}>
-            SHOUROV
+        <FadeIn delay={100} direction="up">
+          {/* The Wrapper */}
+          <div className="overflow-hidden py-2">
+            <div className="font-['Bebas_Neue'] text-[72px] md:text-[12vw] lg:text-[160px] leading-[0.9] text-[var(--color-text)] animate-reveal">SHANAIM</div>
+          </div>
+          <div className="overflow-hidden py-2">
+            <div className="font-['Bebas_Neue'] text-[72px] md:text-[12vw] lg:text-[160px] leading-[0.9] text-transparent animate-reveal animation-delay-200" style={{ WebkitTextStroke: "1px var(--color-text)" }}>
+              SHOUROV
+            </div>
           </div>
         </FadeIn>
 
@@ -58,7 +63,7 @@ export function HeroSection() {
               <div className="mt-8 flex gap-8">
                 {heroStats.map(({ num, label }) => (
                   <div key={label}>
-                    <div className="font-['Bebas_Neue'] text-4xl text-[var(--color-brand)] leading-none">{num}</div>
+                    <div className="font-['Bebas_Neue'] text-6xl text-[var(--color-brand)] leading-none tabular-nums">{num}</div>
                     <div className="text-[10px] text-[var(--color-text-dim)] tracking-[0.15em] mt-1 uppercase">{label}</div>
                   </div>
                 ))}
