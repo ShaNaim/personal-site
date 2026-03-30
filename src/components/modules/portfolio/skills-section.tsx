@@ -10,7 +10,7 @@ export function SkillsSection() {
   return (
     <section id="skills" className="relative py-[100px] px-12 bg-(--color-bg-alt)">
       <div
-        className="absolute inset-0 opacity-[0.022] pointer-events-none"
+        className="absolute inset-0 opacity-[0.1] pointer-events-none"
         style={{
           backgroundImage: "radial-gradient(var(--color-brand) 1px, transparent 1px)",
           backgroundSize: "32px 32px",

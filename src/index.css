@@ -1,13 +1,23 @@
+/* ─────────────────────────────────────────────
+   IMPORTS
+───────────────────────────────────────────── */
 @import "@fontsource-variable/inter";
+@import "@fontsource-variable/geist";
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
-@import "@fontsource-variable/geist";
 
+/* ─────────────────────────────────────────────
+   CUSTOM VARIANTS
+───────────────────────────────────────────── */
 @custom-variant dark (&:is(.dark *));
 
+/* ─────────────────────────────────────────────
+   DESIGN TOKENS — :root
+   Plain CSS vars consumed by raw CSS & style={}
+───────────────────────────────────────────── */
 :root {
-  /* shadcn tokens */
+  /* shadcn primitives */
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -41,36 +51,47 @@
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
 
-  /* Portfolio tokens — plain CSS vars for use in raw CSS */
+  /* Portfolio — brand */
   --color-brand: #ff4d00;
   --color-brand-dim: #ff4d0010;
-  --color-brand-glow: #ff4d0080;
   --color-brand-mid: #ff4d0055;
+  --color-brand-glow: #ff4d0080;
+
+  /* Portfolio — backgrounds */
   --color-bg: #080808;
   --color-bg-alt: #050505;
   --color-bg-card: #0c0c0c;
+
+  /* Portfolio — strokes */
   --color-stroke: #161616;
   --color-stroke-mid: #282828;
   --color-stroke-subtle: #111111;
+
+  /* Portfolio — text */
   --color-text: #e8e8e8;
   --color-text-muted: #ccc;
+  --color-text-mid: #666666;
   --color-text-dim: #333333;
   --color-text-faint: #2e2e2e;
-  --color-text-mid: #666666;
+
+  /* Portfolio — gradients */
   --nav-gradient: linear-gradient(to bottom, #080808f8, transparent);
 
-  /* Typography scale */
+  /* Portfolio — typography scale */
   --size-nav-logo: 24px;
   --size-nav-link: 11px;
   --size-section-label: 0.625rem;
 
-  /* Spacing scale */
+  /* Portfolio — spacing scale */
   --space-section-x: 48px;
-  --space-nav-y: 20px;
   --space-section-y: 6.25rem;
+  --space-nav-y: 20px;
   --space-nav-gap: 36px;
 }
 
+/* ─────────────────────────────────────────────
+   DARK MODE OVERRIDES
+───────────────────────────────────────────── */
 .dark {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
@@ -105,7 +126,11 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
-/* ── Single @theme inline block ── */
+/* ─────────────────────────────────────────────
+   TAILWIND THEME
+   Registers tokens as Tailwind utilities
+   e.g. text-brand, bg-bg, font-bebas
+───────────────────────────────────────────── */
 @theme inline {
   /* shadcn mappings */
   --font-sans: "Geist Variable", sans-serif;
@@ -147,7 +172,7 @@
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
 
-  /* Portfolio color utilities — these enable text-(--color-brand) etc. */
+  /* Portfolio — colors → utilities */
   --color-brand: var(--color-brand);
   --color-brand-dim: var(--color-brand-dim);
   --color-brand-mid: var(--color-brand-mid);
@@ -160,15 +185,18 @@
   --color-stroke-subtle: var(--color-stroke-subtle);
   --color-text: var(--color-text);
   --color-text-muted: var(--color-text-muted);
+  --color-text-mid: var(--color-text-mid);
   --color-text-dim: var(--color-text-dim);
   --color-text-faint: var(--color-text-faint);
-  --color-text-mid: var(--color-text-mid);
 
-  /* Portfolio font families */
+  /* Portfolio — fonts → utilities */
   --font-bebas: "Bebas Neue", sans-serif;
   --font-mono: "DM Mono", "Courier New", monospace;
 }
 
+/* ─────────────────────────────────────────────
+   BASE LAYER
+───────────────────────────────────────────── */
 @layer base {
   *,
   *::before,
@@ -177,43 +205,39 @@
     margin: 0;
     padding: 0;
   }
+
   body {
     background: var(--color-bg);
     color: var(--color-text);
     font-family: var(--font-mono);
     cursor: none;
   }
-}
 
-@layer components {
-  .brutalist-card-grid {
-    @apply grid gap-px bg-[var(--color-stroke-subtle)] border border-[var(--color-stroke-subtle)];
+  a,
+  button {
+    cursor: none !important;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  ::-webkit-scrollbar {
+    width: 3px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-bg);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-brand);
+  }
+  ::selection {
+    background: var(--color-brand);
+    color: var(--color-bg);
   }
 }
 
-/* ── Global ── */
-a,
-button {
-  cursor: none !important;
-  color: inherit;
-  text-decoration: none;
-}
-
-::-webkit-scrollbar {
-  width: 3px;
-}
-::-webkit-scrollbar-track {
-  background: var(--color-bg);
-}
-::-webkit-scrollbar-thumb {
-  background: var(--color-brand);
-}
-::selection {
-  background: var(--color-brand);
-  color: var(--color-bg);
-}
-
-/* ── Keyframes ── */
+/* ─────────────────────────────────────────────
+   KEYFRAMES
+───────────────────────────────────────────── */
 @keyframes blink {
   0%,
   100% {
@@ -234,7 +258,28 @@ button {
   }
 }
 
-/* ── Nav ── */
+@keyframes reveal {
+  from {
+    transform: translateY(110%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* ─────────────────────────────────────────────
+   COMPONENT CLASSES
+   Only for pseudo-selectors & multi-state logic
+   that Tailwind cannot express
+───────────────────────────────────────────── */
+@layer components {
+  /* Shared layout pattern for brutalist bordered grids */
+  .brutalist-card-grid {
+    @apply grid gap-px bg-stroke-subtle border border-stroke-subtle;
+  }
+}
+
+/* Nav */
 .nav-logo {
   font-family: var(--font-bebas);
   font-size: var(--size-nav-logo);
@@ -261,7 +306,7 @@ button {
   color: var(--color-brand);
 }
 
-/* ── Hero ── */
+/* Hero */
 .competency-row {
   display: flex;
   align-items: center;
@@ -294,14 +339,46 @@ button {
   color: var(--color-text-muted);
 }
 
-@keyframes reveal {
-  from {
-    transform: translateY(110%);
-  }
-  to {
-    transform: translateY(0);
-  }
-}
+/* Animations */
 .animate-reveal {
   animation: reveal 1.2s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+}
+
+/* ─────────────────────────────────────────────
+   CYBER GRID PATTERN
+───────────────────────────────────────────── */
+.cyber-grid {
+  opacity: 0.18;
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-bg-alt);
+  background-image:
+    radial-gradient(circle at center, transparent 30%, var(--color-bg) 90%), linear-gradient(var(--color-brand-mid) 1px, transparent 1px), linear-gradient(90deg, var(--color-brand-mid) 1px, transparent 1px),
+    linear-gradient(var(--color-brand-dim) 1px, transparent 1px), linear-gradient(90deg, var(--color-brand-dim) 1px, transparent 1px);
+  background-size:
+    100% 100%,
+    60px 60px,
+    60px 60px,
+    20px 20px,
+    20px 20px;
+  animation: cyber-move 10s linear infinite;
+}
+
+@keyframes cyber-move {
+  0% {
+    background-position:
+      0 0,
+      0 0,
+      0 0,
+      0 0,
+      0 0;
+  }
+  100% {
+    background-position:
+      0 0,
+      60px 60px,
+      60px 60px,
+      40px 40px,
+      40px 40px;
+  }
 }

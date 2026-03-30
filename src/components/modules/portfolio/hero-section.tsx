@@ -8,14 +8,7 @@ export function HeroSection() {
   return (
     <section id="home" className="relative min-h-screen flex flex-col justify-center px-24 pt-[120px] pb-20 overflow-hidden">
       {/* Grid background - Pure CSS Logic via Tailwind arbitrary values */}
-      <div
-        className="absolute inset-0 opacity-[0.03] pointer-events-none"
-        style={{
-          backgroundImage: `linear-gradient(var(--color-brand) 1px, transparent 1px), 
-                            linear-gradient(90deg, var(--color-brand) 1px, transparent 1px)`,
-          backgroundSize: "60px 60px",
-        }}
-      />
+      <div className="cyber-grid absolute inset-0 pointer-events-none" />
 
       {/* Ghost number */}
       <div className="absolute -right-5 top-1/2 -translate-y-1/2 font-['Bebas_Neue'] text-[180px] md:text-[28vw] lg:text-[400px] text-white/[0.02] leading-none select-none pointer-events-none">01</div>
