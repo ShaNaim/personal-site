@@ -77,7 +77,7 @@ export function HeroSection() {
               {coreCompetencies.map((label) => (
                 <div
                   key={label}
-                  className="flex items-center gap-[10px] py-[9px] border-b border-[var(--color-bg-alt)] text-[12px] text-[var(--color-text-mid)] tracking-wide transition-colors duration-200 hover:text-[var(--color-text-muted)] cursor-default"
+                  className="flex items-center gap-[10px] py-[9px] border-b border-[var(--color-bg-alt)] text-[12px] text-[var(--color-text-mid)] tracking-wide transition-colors duration-200 hover:text-[var(--color-text-muted)] cursor-none"
                 >
                   <span className="text-[var(--color-brand)] text-[7px]">⬡</span>
                   {label}
