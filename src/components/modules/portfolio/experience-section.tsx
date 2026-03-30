@@ -1,169 +1,62 @@
-import { useState } from "react";
 import { FadeIn } from "@/components/common/fade-in";
 import { SectionLabel } from "@/components/common/section-label";
 import { experiences } from "@/data/portfolio/experience";
 
 export function ExperienceSection() {
-  const [hoveredExp, setHoveredExp] = useState<number | null>(null);
+  // Removed useState: We'll use Tailwind's 'group' utility for hover states instead.
 
   return (
-    <section
-      id="experience"
-      style={{
-        padding: "100px 48px",
-        position: "relative",
-        background: "var(--color-bg)",
-      }}
-    >
-      <div style={{ maxWidth: 900, margin: "0 auto" }}>
+    <section id="experience" className="relative py-[100px] px-12 bg-[var(--color-bg)]">
+      <div className="max-w-[900px] mx-auto">
         <FadeIn>
           <SectionLabel label="02 / Experience" />
-          <div
-            style={{
-              fontFamily: "'Bebas Neue', sans-serif",
-              fontSize: "clamp(48px, 8vw, 96px)",
-              lineHeight: 0.9,
-              color: "var(--color-text)",
-              marginBottom: 64,
-            }}
-          >
+          <h2 className="font-['Bebas_Neue'] text-[48px] md:text-[8vw] lg:text-[96px] leading-[0.9] text-[var(--color-text)] mb-16 uppercase">
             WHERE I'VE
             <br />
             WORKED
-          </div>
+          </h2>
         </FadeIn>
 
-        <div style={{ position: "relative", paddingLeft: 40 }}>
+        <div className="relative pl-10">
           {/* Timeline line */}
-          <div
-            style={{
-              position: "absolute",
-              left: 0,
-              top: 0,
-              bottom: 0,
-              width: 1,
-              background: "linear-gradient(to bottom, var(--color-brand), var(--color-stroke))",
-            }}
-          />
+          <div className="absolute left-0 top-0 bottom-0 w-[1px]" style={{ background: "linear-gradient(to bottom, var(--color-brand), var(--color-stroke))" }} />
 
           {experiences.map((exp, i) => (
             <FadeIn key={i} delay={i * 150} direction="left">
-              <div style={{ position: "relative", marginBottom: 48 }}>
+              <div className="group relative mb-12">
                 {/* Timeline dot */}
                 <div
-                  style={{
-                    position: "absolute",
-                    left: -5,
-                    top: 28,
-                    width: 11,
-                    height: 11,
-                    borderRadius: "50%",
-                    border: "2px solid var(--color-brand)",
-                    background: exp.current ? "var(--color-brand)" : "var(--color-bg)",
-                    boxShadow: exp.current ? "0 0 14px var(--color-brand)" : "none",
-                  }}
+                  className={`absolute -left-[45px] top-7 w-[11px] h-[11px] rounded-full border-2 border-[var(--color-brand)] transition-all duration-300
+                    ${exp.current ? "bg-[var(--color-brand)] shadow-[0_0_14px_var(--color-brand)]" : "bg-[var(--color-bg)]"}
+                    group-hover:scale-125`}
                 />
 
                 {/* Card */}
-                <div
-                  style={{
-                    padding: "28px 32px",
-                    borderRadius: 2,
-                    border: `1px solid ${hoveredExp === i ? "var(--color-brand)" : "var(--color-stroke)"}`,
-                    background: hoveredExp === i ? "var(--color-bg-card)" : "transparent",
-                    transition: "border-color 0.3s, background 0.3s",
-                  }}
-                  onMouseEnter={() => setHoveredExp(i)}
-                  onMouseLeave={() => setHoveredExp(null)}
-                >
+                <div className="p-7 md:p-8 rounded-[2px] border border-[var(--color-stroke)] bg-transparent transition-all duration-300 group-hover:border-[var(--color-brand)] group-hover:bg-[var(--color-bg-card)]">
                   {/* Card header */}
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "flex-start",
-                      flexWrap: "wrap",
-                      gap: 12,
-                      marginBottom: 20,
-                    }}
-                  >
+                  <div className="flex flex-wrap justify-between items-start gap-3 mb-5">
                     <div>
-                      <div
-                        style={{
-                          fontSize: 11,
-                          color: "var(--color-brand)",
-                          letterSpacing: "0.15em",
-                          marginBottom: 6,
-                        }}
-                      >
-                        {exp.company}
-                      </div>
-                      <div
-                        style={{
-                          fontFamily: "'Bebas Neue', sans-serif",
-                          fontSize: 28,
-                          letterSpacing: "0.05em",
-                          color: "var(--color-text)",
-                        }}
-                      >
-                        {exp.title}
-                      </div>
+                      <div className="text-[11px] text-[var(--color-brand)] tracking-[0.15em] mb-1.5 uppercase">{exp.company}</div>
+                      <div className="font-['Bebas_Neue'] text-[28px] tracking-[0.05em] text-[var(--color-text)] uppercase">{exp.title}</div>
                     </div>
 
                     <span
-                      style={{
-                        fontSize: 11,
-                        padding: "4px 12px",
-                        border: "1px solid",
-                        borderColor: exp.current ? "var(--color-brand)" : "var(--color-stroke)",
-                        color: exp.current ? "var(--color-brand)" : "var(--color-text-dim)",
-                        letterSpacing: "0.1em",
-                        alignSelf: "flex-start",
-                      }}
+                      className={`text-[11px] px-3 py-1 border tracking-[0.1em] self-start flex items-center
+                        ${exp.current ? "border-[var(--color-brand)] text-[var(--color-brand)]" : "border-[var(--color-stroke)] text-[var(--color-text-dim)]"}`}
                     >
-                      {exp.current && (
-                        <span
-                          style={{
-                            marginRight: 6,
-                            animation: "blink 1.2s infinite",
-                          }}
-                        >
-                          ●
-                        </span>
-                      )}
+                      {exp.current && <span className="mr-1.5 animate-pulse">●</span>}
                       {exp.period}
                     </span>
                   </div>
 
-                  <div
-                    style={{
-                      height: 1,
-                      background: "var(--color-stroke-subtle)",
-                      marginBottom: 20,
-                    }}
-                  />
+                  <div className="h-[1px] bg-[var(--color-stroke-subtle)] mb-5" />
 
                   {/* Points */}
-                  <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 12 }}>
+                  <ul className="flex flex-col gap-3 list-none">
                     {exp.points.map((pt, j) => (
-                      <li key={j} style={{ display: "flex", gap: 12, fontSize: 13, lineHeight: 1.7 }}>
-                        <span
-                          style={{
-                            color: "var(--color-brand)",
-                            marginTop: 2,
-                            flexShrink: 0,
-                          }}
-                        >
-                          →
-                        </span>
-                        <span
-                          style={{
-                            color: hoveredExp === i ? "var(--color-text-muted)" : "#484848",
-                            transition: "color 0.2s",
-                          }}
-                        >
-                          {pt}
-                        </span>
+                      <li key={j} className="flex gap-3 text-[13px] leading-[1.7]">
+                        <span className="text-[var(--color-brand)] shrink-0 mt-0.5">→</span>
+                        <span className="text-[#484848] transition-colors duration-200 group-hover:text-[var(--color-text-muted)]">{pt}</span>
                       </li>
                     ))}
                   </ul>
