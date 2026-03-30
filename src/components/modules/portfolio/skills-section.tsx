@@ -1,12 +1,14 @@
+import { useState } from "react";
 import { FadeIn } from "@/components/common/fade-in";
 import { SectionLabel } from "@/components/common/section-label";
 import { SkillCategory } from "@/components/templates/skill-category";
-import { skills, SKILL_LEGEND } from "@/data/portfolio/skills";
+import { skills, SKILL_LEGEND, getRange } from "@/data/portfolio/skills";
 
 export function SkillsSection() {
+  const [hoveredRange, setHoveredRange] = useState<string | null>(null);
+
   return (
-    <section id="skills" className="relative py-[100px] px-12 bg-[var(--color-bg-alt)]">
-      {/* Dot pattern - Handled via arbitrary radial-gradient */}
+    <section id="skills" className="relative py-[100px] px-12 bg-(--color-bg-alt)">
       <div
         className="absolute inset-0 opacity-[0.022] pointer-events-none"
         style={{
@@ -25,24 +27,29 @@ export function SkillsSection() {
           </h2>
         </FadeIn>
 
-        {/* Responsive Grid */}
         <div className="grid grid-cols-1 md:grid-cols-[repeat(auto-fit,minmax(380px,1fr))] gap-12">
           {Object.entries(skills).map(([category, items], ci) => (
             <FadeIn key={category} delay={ci * 100}>
-              <SkillCategory category={category} items={items} animationIndexOffset={ci} />
+              <SkillCategory category={category} items={items} animationIndexOffset={ci} onSkillHover={(level: number | null) => setHoveredRange(level !== null ? getRange(level) : null)} />
             </FadeIn>
           ))}
         </div>
-        <div className="mt-20 pt-8 border-t border-(--color-stroke-subtle) flex flex-wrap gap-x-8 gap-y-3  transition-opacity duration-500">
-          {SKILL_LEGEND.map(({ range, fun, pro }) => (
-            <div key={range} className="group w-52 flex items-center gap-2 opacity-40 hover:opacity-100">
-              <span className="text-[8px] text-(--color-brand)">●</span>
-              <span className="inline-block text-(--size-section-label) tracking-widest uppercase text-(--color-text-dim)">
-                {range} <span className="group-hover:hidden">{fun}</span>
-                <span className="hidden group-hover:inline text-(--color-text-muted)">{pro}</span>
-              </span>
-            </div>
-          ))}
+
+        {/* Legend */}
+        <div className="mt-20 pt-8 border-t border-(--color-stroke-subtle) flex flex-wrap gap-x-8 gap-y-3 transition-opacity duration-500">
+          {SKILL_LEGEND.map(({ range, fun, pro }) => {
+            const isActive = hoveredRange === range;
+            return (
+              <div key={range} className={`group w-52 flex items-center gap-2 transition-opacity duration-300 ${isActive ? "opacity-100" : hoveredRange ? "opacity-20" : "opacity-40"}`}>
+                <span className={`text-[8px] transition-colors duration-300 ${isActive ? "text-(--color-brand)" : "text-(--color-text-muted)"}`}>●</span>
+                <span className="inline-block text-(--size-section-label) tracking-widest uppercase">
+                  <span className={`transition-colors duration-300 ${isActive ? "text-(--color-brand)" : "text-(--color-text-muted)"}`}>{range} </span>
+                  <span className={`group-hover:hidden ${isActive ? "text-(--color-brand)" : "text-(--color-text-muted)"}`}>{fun}</span>
+                  <span className={`hidden group-hover:inline ${isActive ? "text-(--color-brand)" : "text-(--color-text-muted)"}`}>{pro}</span>
+                </span>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

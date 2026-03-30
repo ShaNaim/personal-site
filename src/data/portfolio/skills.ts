@@ -8,7 +8,7 @@ export const skills: SkillsMap = {
   "Libraries & Frameworks": [
     { name: "React", level: 94, color: "#61DAFB" },
     { name: "Next.js", level: 80, color: "#ffffff" },
-    { name: "Vue.js", level: 72, color: "#4FC08D" },
+    { name: "Vue.js", level: 69, color: "#4FC08D" },
     { name: "Node.js", level: 88, color: "#339933" },
     { name: "Express.js", level: 82, color: "#aaaaaa" },
   ],
@@ -18,7 +18,7 @@ export const skills: SkillsMap = {
   ],
   "Databases & Tools": [
     { name: "PostgreSQL", level: 76, color: "#4169E1" },
-    { name: "MongoDB", level: 70, color: "#47A248" },
+    { name: "MongoDB", level: 69, color: "#47A248" },
     { name: "Prisma", level: 80, color: "#a78bfa" },
     { name: "Zod", level: 88, color: "#3178C6" },
   ],
@@ -32,3 +32,12 @@ export const SKILL_LEGEND = [
   { range: "60+", fun: "Adventurer ⚔️", pro: "Intermediate" },
   { range: "<50", fun: "Apprentice 🌱", pro: "Familiar" },
 ];
+
+export function getRange(level: number): string {
+  if (level >= 101) return "101+";
+  if (level >= 90) return "90+";
+  if (level >= 80) return "80+";
+  if (level >= 70) return "70+";
+  if (level >= 60) return "60+";
+  return "<50";
+}
