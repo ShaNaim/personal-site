@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Bebas+Neue&display=swap");
+
 @import "@fontsource-variable/inter";
 @import "tailwindcss";
 @import "tw-animate-css";
@@ -7,6 +9,7 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
+  /* shadcn tokens */
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -39,6 +42,35 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  /* Portfolio tokens — plain CSS vars for use in raw CSS */
+  --color-brand: #ff4d00;
+  --color-brand-dim: #ff4d0010;
+  --color-brand-glow: #ff4d0080;
+  --color-brand-mid: #ff4d0055;
+  --color-bg: #080808;
+  --color-bg-alt: #050505;
+  --color-bg-card: #0c0c0c;
+  --color-stroke: #161616;
+  --color-stroke-mid: #282828;
+  --color-stroke-subtle: #111111;
+  --color-text: #e8e8e8;
+  --color-text-muted: #ccc;
+  --color-text-dim: #333333;
+  --color-text-faint: #2e2e2e;
+  --color-text-mid: #666666;
+  --nav-gradient: linear-gradient(to bottom, #080808f8, transparent);
+
+  /* Typography scale */
+  --size-nav-logo: 24px;
+  --size-nav-link: 11px;
+  --size-section-label: 0.625rem;
+
+  /* Spacing scale */
+  --space-section-x: 48px;
+  --space-nav-y: 20px;
+  --space-section-y: 6.25rem;
+  --space-nav-gap: 36px;
 }
 
 .dark {
@@ -75,39 +107,40 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+/* ── Single @theme inline block ── */
 @theme inline {
+  /* shadcn mappings */
   --font-sans: "Geist Variable", sans-serif;
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
-  --color-ring: var(--ring);
-  --color-input: var(--input);
-  --color-border: var(--border);
-  --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
-  --color-card: var(--card);
-  --color-foreground: var(--foreground);
   --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -115,17 +148,144 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+
+  /* Portfolio color utilities — these enable text-(--color-brand) etc. */
+  --color-brand: var(--color-brand);
+  --color-brand-dim: var(--color-brand-dim);
+  --color-brand-mid: var(--color-brand-mid);
+  --color-brand-glow: var(--color-brand-glow);
+  --color-bg: var(--color-bg);
+  --color-bg-alt: var(--color-bg-alt);
+  --color-bg-card: var(--color-bg-card);
+  --color-stroke: var(--color-stroke);
+  --color-stroke-mid: var(--color-stroke-mid);
+  --color-stroke-subtle: var(--color-stroke-subtle);
+  --color-text: var(--color-text);
+  --color-text-muted: var(--color-text-muted);
+  --color-text-dim: var(--color-text-dim);
+  --color-text-faint: var(--color-text-faint);
+  --color-text-mid: var(--color-text-mid);
+
+  /* Portfolio font families */
+  --font-bebas: "Bebas Neue", sans-serif;
+  --font-mono: "DM Mono", "Courier New", monospace;
 }
 
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
-    font-family: "Inter Variable", sans-serif;
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
   }
   body {
-    @apply bg-background text-foreground;
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-mono);
+    cursor: none;
   }
-  html {
-    @apply font-sans;
+}
+
+/* ── Global ── */
+a,
+button {
+  cursor: none !important;
+  color: inherit;
+  text-decoration: none;
+}
+
+::-webkit-scrollbar {
+  width: 3px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-brand);
+}
+::selection {
+  background: var(--color-brand);
+  color: var(--color-bg);
+}
+
+/* ── Keyframes ── */
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
   }
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* ── Nav ── */
+.nav-logo {
+  font-family: var(--font-bebas);
+  font-size: var(--size-nav-logo);
+  letter-spacing: 0.12em;
+  color: var(--color-brand);
+}
+
+.nav-link {
+  font-size: var(--size-nav-link);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  opacity: 0.38;
+  color: var(--color-text);
+  cursor: none !important;
+  transition:
+    opacity 0.25s,
+    color 0.25s;
+}
+.nav-link:hover {
+  opacity: 0.9;
+}
+.nav-link.active {
+  opacity: 1;
+  color: var(--color-brand);
+}
+
+/* ── Hero ── */
+.competency-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--color-bg-alt);
+  font-size: 12px;
+  color: var(--color-text-mid);
+  letter-spacing: 0.03em;
+  transition: color 0.2s;
+}
+.competency-row:last-child {
+  border-bottom: none;
+}
+.competency-row:hover {
+  color: var(--color-text-muted);
+}
+
+.soft-tag {
+  font-size: 10px;
+  padding: 3px 10px;
+  border: 1px solid var(--color-stroke);
+  color: var(--color-text-mid);
+  letter-spacing: 0.05em;
+  border-radius: 2px;
+  transition: all 0.2s;
+}
+.soft-tag:hover {
+  border-color: var(--color-stroke-mid);
+  color: var(--color-text-muted);
 }
