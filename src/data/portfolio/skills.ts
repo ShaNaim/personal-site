@@ -1,5 +1,15 @@
 import type { SkillsMap } from "@/types";
 
+export function getRange(level: number): string {
+  if (level >= 101) return "101+";
+  if (level >= 90) return "90+";
+  if (level >= 80) return "80+";
+  if (level >= 70) return "70+";
+  if (level >= 60) return "60+";
+  return "<50";
+}
+
+// Server
 export const skills: SkillsMap = {
   Languages: [
     { name: "TypeScript", level: 92, color: "#3178C6" },
@@ -32,12 +42,3 @@ export const SKILL_LEGEND = [
   { range: "60+", fun: "Adventurer ⚔️", pro: "Intermediate" },
   { range: "<50", fun: "Apprentice 🌱", pro: "Familiar" },
 ];
-
-export function getRange(level: number): string {
-  if (level >= 101) return "101+";
-  if (level >= 90) return "90+";
-  if (level >= 80) return "80+";
-  if (level >= 70) return "70+";
-  if (level >= 60) return "60+";
-  return "<50";
-}

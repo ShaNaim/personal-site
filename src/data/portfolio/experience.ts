@@ -1,5 +1,6 @@
 import type { Experience } from "@/types";
 
+// Server
 export const experiences: Experience[] = [
   {
     title: "Software Developer",

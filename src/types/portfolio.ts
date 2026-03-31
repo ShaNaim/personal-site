@@ -28,3 +28,12 @@ export interface StatItem {
   num: string;
   label: string;
 }
+
+export interface PersonalInfo {
+  firstName: string;
+  lastName: string;
+  experience: string;
+  title: string;
+  description: string;
+  quote: string;
+}

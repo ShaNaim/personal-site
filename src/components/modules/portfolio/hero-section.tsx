@@ -2,7 +2,7 @@ import { Pill } from "@/components/common/pill";
 import { Divider } from "@/components/common/divider";
 import { FadeIn } from "@/components/common/fade-in";
 import { coreCompetencies, softSkills } from "@/data/portfolio/competencies";
-import { heroStats, techStack } from "@/data/portfolio/personal";
+import { heroStats, techStack, personalInfo } from "@/data/portfolio/personal";
 
 export function HeroSection() {
   return (
@@ -18,8 +18,8 @@ export function HeroSection() {
         {/* Badge row */}
         <FadeIn>
           <div className="flex items-center gap-4 mb-7">
-            <Pill>Full-Stack Developer</Pill>
-            <span className="text-[10px] text-[var(--color-text-faint)] tracking-[0.2em] uppercase">· 2+ YRS EXPERIENCE</span>
+            <Pill>{personalInfo.title}</Pill>
+            <span className="text-[10px] text-[var(--color-text-faint)] tracking-[0.2em] uppercase">· {personalInfo.experience} YRS EXPERIENCE</span>
           </div>
         </FadeIn>
 
@@ -27,11 +27,11 @@ export function HeroSection() {
         <FadeIn delay={100} direction="up">
           {/* The Wrapper */}
           <div className="overflow-hidden py-2">
-            <div className="font-['Bebas_Neue'] text-[72px] md:text-[12vw] lg:text-[160px] leading-[0.9] text-[var(--color-text)] animate-reveal">SHANAIM</div>
+            <div className="font-['Bebas_Neue'] text-[72px] md:text-[12vw] lg:text-[160px] leading-[0.9] text-[var(--color-text)] animate-reveal">{personalInfo.firstName}</div>
           </div>
           <div className="overflow-hidden py-2">
             <div className="font-['Bebas_Neue'] text-[72px] md:text-[12vw] lg:text-[160px] leading-[0.9] text-transparent animate-reveal animation-delay-200" style={{ WebkitTextStroke: "1px var(--color-text)" }}>
-              SHOUROV
+              {personalInfo.lastName}
             </div>
           </div>
         </FadeIn>
@@ -46,11 +46,8 @@ export function HeroSection() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-14 items-start">
             {/* Bio */}
             <div>
-              <p className="text-[13px] leading-[1.95] text-[var(--color-text-muted)] mb-5">
-                I build end-to-end web applications — from pixel-precise interfaces to scalable backend integrations. I love <span className="text-[var(--color-text)] font-medium">minimalism</span> and{" "}
-                <span className="text-[var(--color-text)] font-medium">brutalist design</span>, and I believe the best code is the kind nobody notices.
-              </p>
-              <p className="text-[11px] text-[var(--color-text-dim)] italic leading-[1.7]">"If it works on my machine, it's officially your problem now."</p>
+              <p className="text-[13px] leading-[1.95] text-primary mb-5">{personalInfo.description}</p>
+              <p className="text-[11px] text-text-dim italic leading-[1.7]">"{personalInfo.quote}"</p>
 
               {/* Stats */}
               <div className="mt-8 flex gap-8">

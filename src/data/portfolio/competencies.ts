@@ -1,3 +1,4 @@
+// Server
 export const coreCompetencies: string[] = [
   "Full-Stack Web Development",
   "Responsive UI/UX Design",
