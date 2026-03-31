@@ -35,7 +35,7 @@ export const ClockCard = memo(function ClockCard({ entry }: ClockCardProps) {
           <div>
             <div className="flex items-center gap-2 mb-0.5">
               {isDaytime ? <Sun size={11} className="text-brand opacity-70" /> : <Moon size={11} className="text-text-mid opacity-70" />}
-              <span className="font-bebas text-[18px] tracking-[0.1em] text-text uppercase">{entry.city}</span>
+              <span className="font-bebas text-[18px] tracking-widest text-text uppercase">{entry.city}</span>
               {entry.isPinned && entry.id === "local" && <span className="text-[8px] tracking-[0.2em] text-brand border border-brand px-1.5 py-0.5 leading-none uppercase">Local</span>}
             </div>
             <div className="text-[10px] text-text-faint tracking-wider">{entry.country}</div>

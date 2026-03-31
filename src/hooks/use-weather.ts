@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchWeather, type WeatherData } from "@/lib/weather";
+import { fetchWeather } from "@/services/weather.service";
+import type { WeatherData } from "@/types/weather";
 
 export function useWeather(lat?: number, lng?: number) {
   return useQuery<WeatherData>({
