@@ -8,6 +8,8 @@ export interface ClockEntry {
   country: string;
   timezone: string;
   isPinned?: boolean;
+  lat?: number;
+  lng?: number;
 }
 
 interface ClockStore {
@@ -20,8 +22,6 @@ interface ClockStore {
 
 const MAX_CLOCKS = 10;
 
-// Resolve user's local city/country from timezone string
-// e.g. "Asia/Dhaka" → city: "Dhaka", country: "Asia"
 function resolveLocal(): ClockEntry {
   const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const parts = tz.split("/");
@@ -31,6 +31,7 @@ function resolveLocal(): ClockEntry {
     country: parts[0] ?? "",
     timezone: tz,
     isPinned: true,
+    // no lat/lng — will use Geolocation API
   };
 }
 
@@ -42,6 +43,8 @@ const DEFAULT_CLOCKS: ClockEntry[] = [
     country: "Universal Time",
     timezone: "UTC",
     isPinned: true,
+    lat: 0,
+    lng: 0,
   },
   {
     id: "gmt",
@@ -49,6 +52,8 @@ const DEFAULT_CLOCKS: ClockEntry[] = [
     country: "GMT / UK",
     timezone: "Europe/London",
     isPinned: true,
+    lat: 51.5074,
+    lng: -0.1278,
   },
 ];
 
@@ -61,8 +66,7 @@ export const useClockStore = create<ClockStore>()(
       addClock: (city) => {
         const { clocks } = get();
         if (clocks.length >= MAX_CLOCKS) return;
-        const exists = clocks.some((c) => c.timezone === city.timezone);
-        if (exists) return;
+        if (clocks.some((c) => c.timezone === city.timezone)) return;
         set({
           clocks: [
             ...clocks,
@@ -71,6 +75,8 @@ export const useClockStore = create<ClockStore>()(
               city: city.city,
               country: city.country,
               timezone: city.timezone,
+              lat: city.lat,
+              lng: city.lng,
             },
           ],
         });
@@ -82,17 +88,16 @@ export const useClockStore = create<ClockStore>()(
     }),
     {
       name: "clock-store",
+      version: 2,
+      migrate: () => ({ clocks: DEFAULT_CLOCKS }),
       partialize: (state) => ({ clocks: state.clocks }),
     },
   ),
 );
 
 let tickerStarted = false;
-
 export function startGlobalTicker() {
   if (tickerStarted) return;
   tickerStarted = true;
-  setInterval(() => {
-    useClockStore.getState()._tick();
-  }, 1000);
+  setInterval(() => useClockStore.getState()._tick(), 1000);
 }
