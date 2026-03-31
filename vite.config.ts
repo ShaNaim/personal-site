@@ -10,7 +10,11 @@ export default defineConfig({
       target: "react",
       autoCodeSplitting: true,
     }),
-    react(),
+    react({
+      babel: {
+        plugins: process.env.NODE_ENV === "development" ? [["@locator/babel-jsx/dist", { env: "development" }]] : [],
+      },
+    }),
     tailwindcss(),
   ],
   resolve: {
