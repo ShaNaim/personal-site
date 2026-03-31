@@ -15,3 +15,16 @@ export const heroStats: StatItem[] = [
   { num: "3", label: "Products" },
   { num: "10+", label: "Tech Used" },
 ];
+
+export const techStack = [
+  { label: "JavaScript" },
+  { label: "TypeScript" },
+  { label: "React" },
+  { label: "Next.js" },
+  { label: "Vue.js" },
+  { label: "Node.js" },
+  { label: "PostgreSQL" },
+  { label: "Prisma" },
+  { label: "Docker" },
+  { label: "Tailwind" },
+];

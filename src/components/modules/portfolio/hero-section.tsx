@@ -2,7 +2,7 @@ import { Pill } from "@/components/common/pill";
 import { Divider } from "@/components/common/divider";
 import { FadeIn } from "@/components/common/fade-in";
 import { coreCompetencies, softSkills } from "@/data/portfolio/competencies";
-import { heroStats } from "@/data/portfolio/personal";
+import { heroStats, techStack } from "@/data/portfolio/personal";
 
 export function HeroSection() {
   return (
@@ -60,6 +60,17 @@ export function HeroSection() {
                     <div className="text-[10px] text-[var(--color-text-dim)] tracking-[0.15em] mt-1 uppercase">{label}</div>
                   </div>
                 ))}
+              </div>
+              {/* Tech Stack */}
+              <div className="mt-8 pt-8 border-t border-stroke-subtle">
+                <div className="text-[9px] tracking-[0.3em] uppercase text-text-faint mb-3">Stack</div>
+                <div className="flex flex-wrap gap-2">
+                  {techStack.map(({ label }) => (
+                    <span key={label} className="text-[10px] px-2.5 py-1 border border-stroke text-text-mid tracking-wider rounded-sm transition-all duration-200 hover:border-brand hover:text-brand">
+                      {label}
+                    </span>
+                  ))}
+                </div>
               </div>
             </div>
 
