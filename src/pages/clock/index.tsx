@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import { ClockCard } from "@/components/templates/clock-card";
-import { CitySearch } from "@/components/templates/city-search";
+import { ClockCard } from "@/components/modules/clock/clock-card";
+import { CitySearch } from "@/components/modules/clock/city-search";
 import { useClockStore, startGlobalTicker } from "@/stores/clock-store";
 export default function ClockPage() {
   const clocks = useClockStore((s) => s.clocks);

@@ -20,32 +20,49 @@ interface ClockStore {
 
 const MAX_CLOCKS = 10;
 
+// Resolve user's local city/country from timezone string
+// e.g. "Asia/Dhaka" → city: "Dhaka", country: "Asia"
+function resolveLocal(): ClockEntry {
+  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const parts = tz.split("/");
+  return {
+    id: "local",
+    city: parts[1]?.replace(/_/g, " ") ?? "Local",
+    country: parts[0] ?? "",
+    timezone: tz,
+    isPinned: true,
+  };
+}
+
+const DEFAULT_CLOCKS: ClockEntry[] = [
+  resolveLocal(),
+  {
+    id: "utc",
+    city: "UTC",
+    country: "Universal Time",
+    timezone: "UTC",
+    isPinned: true,
+  },
+  {
+    id: "gmt",
+    city: "London",
+    country: "GMT / UK",
+    timezone: "Europe/London",
+    isPinned: true,
+  },
+];
+
 export const useClockStore = create<ClockStore>()(
   persist(
     (set, get) => ({
       now: new Date(),
-
-      // Local time pinned by default — derived from system, no timezone needed
-      clocks: [
-        {
-          id: "local",
-          city: "Local",
-          country: "",
-          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-          isPinned: true,
-        },
-      ],
+      clocks: DEFAULT_CLOCKS,
 
       addClock: (city) => {
         const { clocks } = get();
-
-        // Enforce max (local pinned + 9 user clocks = 10 total)
         if (clocks.length >= MAX_CLOCKS) return;
-
-        // Prevent duplicate timezones
         const exists = clocks.some((c) => c.timezone === city.timezone);
         if (exists) return;
-
         set({
           clocks: [
             ...clocks,
@@ -59,22 +76,17 @@ export const useClockStore = create<ClockStore>()(
         });
       },
 
-      removeClock: (id) => {
-        set({ clocks: get().clocks.filter((c) => c.id !== id) });
-      },
+      removeClock: (id) => set({ clocks: get().clocks.filter((c) => c.id !== id) }),
 
       _tick: () => set({ now: new Date() }),
     }),
     {
       name: "clock-store",
-      // Only persist clocks — not `now`, not functions
       partialize: (state) => ({ clocks: state.clocks }),
     },
   ),
 );
 
-// ── Global ticker — one setInterval for the entire app ──
-// Lives outside the store so it's initialized once at module load
 let tickerStarted = false;
 
 export function startGlobalTicker() {

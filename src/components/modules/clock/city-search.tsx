@@ -2,8 +2,7 @@ import { useState, useMemo } from "react";
 import { Search, Plus } from "lucide-react";
 import { CITIES } from "@/data/clock";
 import { useClockStore } from "@/stores/clock-store";
-
-const MAX_CLOCKS = 10;
+import { MAX_CLOCKS } from "@/constants/clock";
 
 export function CitySearch() {
   const [query, setQuery] = useState("");
