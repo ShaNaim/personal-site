@@ -36,3 +36,6 @@ export const CITIES: City[] = [
   { city: "Vancouver", country: "Canada", timezone: "America/Vancouver" },
   { city: "Mexico City", country: "Mexico", timezone: "America/Mexico_City" },
 ];
+
+export const MAX_CLOCKS = 12;
+export const SEARCH_MAX_LENNGTH = CITIES.length;

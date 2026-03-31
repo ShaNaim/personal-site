@@ -1,8 +1,7 @@
 import { useState, useMemo } from "react";
 import { Search, Plus } from "lucide-react";
-import { CITIES } from "@/data/clock";
+import { CITIES, MAX_CLOCKS, SEARCH_MAX_LENNGTH } from "@/data/clock";
 import { useClockStore } from "@/stores/clock-store";
-import { MAX_CLOCKS } from "@/constants/clock";
 
 export function CitySearch() {
   const [query, setQuery] = useState("");
@@ -10,9 +9,9 @@ export function CitySearch() {
   const { clocks, addClock } = useClockStore();
 
   const filtered = useMemo(() => {
-    if (!query.trim()) return CITIES.slice(0, 8);
+    if (!query.trim()) return CITIES.slice(0, SEARCH_MAX_LENNGTH);
     const q = query.toLowerCase();
-    return CITIES.filter((c) => c.city.toLowerCase().includes(q) || c.country.toLowerCase().includes(q)).slice(0, 8);
+    return CITIES.filter((c) => c.city.toLowerCase().includes(q) || c.country.toLowerCase().includes(q)).slice(0, SEARCH_MAX_LENNGTH);
   }, [query]);
 
   const isFull = clocks.length >= MAX_CLOCKS;
@@ -36,7 +35,7 @@ export function CitySearch() {
           <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
 
           {/* Dropdown */}
-          <div className="absolute top-full left-0 mt-2 w-72 border border-stroke bg-bg-card z-50 shadow-2xl">
+          <div className="absolute top-full left-0 mt-2 w-80 border border-stroke bg-bg-card z-50 shadow-2xl">
             {/* Search input */}
             <div className="flex items-center gap-2 px-3 py-2 border-b border-stroke">
               <Search size={12} className="text-text-faint shrink-0" />
@@ -50,7 +49,7 @@ export function CitySearch() {
             </div>
 
             {/* Results */}
-            <div className="max-h-64 overflow-y-auto">
+            <div className="max-h-100 overflow-y-auto">
               {filtered.length === 0 ? (
                 <div className="px-3 py-4 text-[11px] text-text-faint text-center tracking-wider">No cities found</div>
               ) : (
