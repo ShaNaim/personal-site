@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { ClockCard } from "@/components/modules/clock/clock-card";
 import { CitySearch } from "@/components/modules/clock/city-search";
 import { useClockStore, startGlobalTicker } from "@/stores/clock-store";
+import { DvdClock } from "@/components/common/dvd-clock";
 export default function ClockPage() {
   const clocks = useClockStore((s) => s.clocks);
 
@@ -12,6 +13,7 @@ export default function ClockPage() {
 
   return (
     <main className="min-h-screen bg-bg px-[var(--space-section-x)] py-32">
+      <DvdClock />
       {/* Page header */}
       <div className="max-w-[900px] mx-auto">
         <div className="flex items-end justify-between mb-12 gap-4 flex-wrap">
