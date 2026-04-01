@@ -17,11 +17,7 @@ export default function ClockPage() {
         <div className="flex items-end justify-between mb-12 gap-4 flex-wrap">
           <div>
             <div className="text-label tracking-[0.3em] uppercase text-brand mb-3">World Clocks</div>
-            <h1 className="font-bebas text-[clamp(48px,8vw,96px)] leading-[0.9] text-text uppercase">
-              WHAT TIME
-              <br />
-              IS IT?
-            </h1>
+            <h1 className="font-bebas text-[clamp(48px,8vw,96px)] leading-[0.9] text-text uppercase">NAN O'CLOCK</h1>
           </div>
           <CitySearch />
         </div>
