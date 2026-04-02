@@ -287,6 +287,10 @@
   color: var(--color-brand);
 }
 
+.nav-logo svg path {
+  fill: var(--color-brand);
+}
+
 .nav-link {
   font-size: var(--size-nav-link);
   letter-spacing: 0.15em;

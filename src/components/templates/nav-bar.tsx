@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { SECTIONS, type SectionId } from "@/data/portfolio";
+import Logo from "@/assets/logo.svg?react";
 
 export function NavBar() {
   const [activeSection, setActiveSection] = useState<SectionId>("home");
@@ -34,7 +35,9 @@ export function NavBar() {
         background: "var(--nav-gradient)",
       }}
     >
-      <div className="nav-logo">SS</div>
+      <div className="nav-logo">
+        <Logo height={32} width="auto" aria-label="Logo" />
+      </div>
 
       <div className="flex gap-(--space-nav-gap)">
         {SECTIONS.map((s) => (
