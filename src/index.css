@@ -386,3 +386,30 @@
       40px 40px;
   }
 }
+
+/* ─────────────────────────────────────────────
+   GLITCH EFFECT
+───────────────────────────────────────────── */
+
+.glitch {
+  position: relative;
+}
+
+.glitch::after {
+  all: unset;
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  font: inherit;
+  color: white;
+  -webkit-text-stroke: 0px;
+  clip-path: inset(50% 50% 50% 50%);
+}
+
+.glitch:hover::after {
+  text-shadow:
+    -3px -3px 0px #1df2f0,
+    3px 3px 0px #e94be8;
+  animation: glitch_4011 1s steps(2, end) infinite;
+}

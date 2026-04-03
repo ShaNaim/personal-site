@@ -3,6 +3,7 @@ import { Divider } from "@/components/common/divider";
 import { FadeIn } from "@/components/common/fade-in";
 import { coreCompetencies, softSkills } from "@/data/portfolio/competencies";
 import { heroStats, techStack, personalInfo } from "@/data/portfolio/personal";
+import { GlitchText } from "@/components/common/glitch-text";
 
 export function HeroSection() {
   return (
@@ -18,7 +19,9 @@ export function HeroSection() {
         {/* Badge row */}
         <FadeIn>
           <div className="flex items-center gap-4 mb-7">
-            <Pill>{personalInfo.title}</Pill>
+            <Pill>
+              <GlitchText text={personalInfo.title} />
+            </Pill>
             <span className="text-[10px] text-[var(--color-text-faint)] tracking-[0.2em] uppercase">· {personalInfo.experience} YRS EXPERIENCE</span>
           </div>
         </FadeIn>
@@ -64,7 +67,7 @@ export function HeroSection() {
                 <div className="flex flex-wrap gap-2">
                   {techStack.map(({ label }) => (
                     <span key={label} className="text-[10px] px-2.5 py-1 border border-stroke text-text-mid tracking-wider rounded-sm transition-all duration-200 hover:border-brand hover:text-brand">
-                      {label}
+                      <GlitchText text={label} />
                     </span>
                   ))}
                 </div>

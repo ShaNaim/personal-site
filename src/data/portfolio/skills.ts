@@ -35,10 +35,10 @@ export const skills: SkillsMap = {
 };
 
 export const SKILL_LEGEND = [
-  { range: "101+", fun: "Torvalds 🧙", pro: "Torvalds" },
-  { range: "90+", fun: "Wizard 🧙", pro: "Expert" },
-  { range: "80+", fun: "Veteran 🎖️", pro: "Pro" },
-  { range: "70+", fun: "Adventurer ⚔️", pro: "Advanced" },
-  { range: "60+", fun: "Adventurer ⚔️", pro: "Intermediate" },
-  { range: "<50", fun: "Apprentice 🌱", pro: "Familiar" },
+  { range: "101+", fun: "Torvalds", pro: "Torvalds" },
+  { range: "90+", fun: "Master Yoda", pro: "Expert" },
+  { range: "80+", fun: "Jedi Master", pro: "Pro" },
+  { range: "70+", fun: "Jedi Knight", pro: "Advanced" },
+  { range: "60+", fun: "Jedi Padawan", pro: "Intermediate" },
+  { range: "<50", fun: "Force Sensitive", pro: "Familiar" },
 ];

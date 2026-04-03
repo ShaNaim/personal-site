@@ -37,7 +37,10 @@ export function SkillCategory({ category, items, animationIndexOffset = 0, onSki
 
             <div className="min-w-[70px] text-right tabular-nums">
               <span className="text-(--color-text-mid) uppercase tracking-tighter group-hover:hidden">{getLevelLabel(skill.level)}</span>
-              <span className="hidden group-hover:inline text-[11px] text-(--color-brand) font-mono">{skill.level}%</span>
+              <span className="ml-2 group-hover:hidden text-[11px] text-primary-foreground font-mono">{skill.level}%</span>
+
+              <span className="hidden group-hover:inline text-primary-foreground uppercase tracking-tighter">{getLevelLabel(skill.level)}</span>
+              <span className="ml-2 hidden group-hover:inline text-[11px] text-(--color-brand) font-mono">{skill.level}%</span>
             </div>
           </div>
         ))}

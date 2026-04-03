@@ -3,6 +3,7 @@ import { FadeIn } from "@/components/common/fade-in";
 import { SectionLabel } from "@/components/common/section-label";
 import { SkillCategory } from "@/components/templates/skill-category";
 import { skills, SKILL_LEGEND, getRange } from "@/data/portfolio/skills";
+import { GlitchText } from "@/components/common/glitch-text";
 
 export function SkillsSection() {
   const [hoveredRange, setHoveredRange] = useState<string | null>(null);
@@ -40,12 +41,18 @@ export function SkillsSection() {
           {SKILL_LEGEND.map(({ range, fun, pro }) => {
             const isActive = hoveredRange === range;
             return (
-              <div key={range} className={`group w-52 flex items-center gap-2 transition-opacity duration-300 ${isActive ? "opacity-100" : hoveredRange ? "opacity-20" : "opacity-40"}`}>
+              <div key={range} className={`group flex items-center gap-2 transition-opacity duration-300 ${isActive ? "opacity-100" : hoveredRange ? "opacity-20" : "opacity-40"}`}>
                 <span className={`text-[8px] transition-colors duration-300 ${isActive ? "text-(--color-brand)" : "text-(--color-text-muted)"}`}>●</span>
                 <span className="inline-block text-(--size-section-label) tracking-widest uppercase">
-                  <span className={`transition-colors duration-300 ${isActive ? "text-(--color-brand)" : "text-(--color-text-muted)"}`}>{range} </span>
-                  <span className={`group-hover:hidden ${isActive ? "text-(--color-brand)" : "text-(--color-text-muted)"}`}>{fun}</span>
-                  <span className={`hidden group-hover:inline ${isActive ? "text-(--color-brand)" : "text-(--color-text-muted)"}`}>{pro}</span>
+                  <span className={`transition-colors duration-300 ${isActive ? "text-(--color-brand)" : "text-(--color-text-muted)"}`}>
+                    <GlitchText text={range} />{" "}
+                  </span>
+                  <span className={`group-hover:hidden ${isActive ? "text-(--color-brand)" : "text-(--color-text-muted)"}`}>
+                    <GlitchText text={fun} />
+                  </span>
+                  <span className={`hidden group-hover:inline ${isActive ? "text-(--color-brand)" : "text-(--color-text-muted)"}`}>
+                    <GlitchText text={pro} />
+                  </span>
                 </span>
               </div>
             );
