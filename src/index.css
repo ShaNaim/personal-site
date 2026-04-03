@@ -413,3 +413,30 @@
     3px 3px 0px #e94be8;
   animation: glitch_4011 1s steps(2, end) infinite;
 }
+
+/* ─────────────────────────────────────────────
+   SHINE EFFECT
+───────────────────────────────────────────── */
+
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-shine::after {
+  content: "";
+  height: 155px;
+  width: 50px;
+  left: -75px;
+  top: -50px;
+  position: absolute;
+  background: var(--color-brand);
+  opacity: 0.15;
+  transform: rotate(35deg);
+  transition: left 550ms cubic-bezier(0.19, 1, 0.22, 1);
+  z-index: 0;
+}
+
+.btn-shine:hover::after {
+  left: 120%;
+}
