@@ -13,8 +13,7 @@
 @custom-variant dark (&:is(.dark *));
 
 /* ─────────────────────────────────────────────
-   DESIGN TOKENS — :root
-   Plain CSS vars consumed by raw CSS & style={}
+   DESIGN TOKENS — :root  (DARK — default)
 ───────────────────────────────────────────── */
 :root {
   /* shadcn primitives */
@@ -51,31 +50,31 @@
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
 
-  /* Portfolio — brand */
+  /* Portfolio — brand (NEVER changes) */
   --color-brand: #ff4d00;
   --color-brand-dim: #ff4d0010;
   --color-brand-mid: #ff4d0055;
   --color-brand-glow: #ff4d0080;
 
-  /* Portfolio — backgrounds */
-  --color-bg: #080808;
-  --color-bg-alt: #050505;
-  --color-bg-card: #0c0c0c;
+  /* Portfolio — backgrounds (LIGHT) */
+  --color-bg: #ffffff;
+  --color-bg-alt: #eeeeee;
+  --color-bg-card: #ffffff;
 
-  /* Portfolio — strokes */
-  --color-stroke: #161616;
-  --color-stroke-mid: #282828;
-  --color-stroke-subtle: #111111;
+  /* Portfolio — strokes (LIGHT) */
+  --color-stroke: #e0e0e0;
+  --color-stroke-mid: #cccccc;
+  --color-stroke-subtle: #e8e8e8;
 
-  /* Portfolio — text */
-  --color-text: #e8e8e8;
-  --color-text-muted: #ccc;
-  --color-text-mid: #666666;
-  --color-text-dim: #333333;
-  --color-text-faint: #2e2e2e;
+  /* Portfolio — text (LIGHT) */
+  --color-text: #111111;
+  --color-text-muted: #333333;
+  --color-text-mid: #777777;
+  --color-text-dim: #aaaaaa;
+  --color-text-faint: #cccccc;
 
-  /* Portfolio — gradients */
-  --nav-gradient: linear-gradient(to bottom, #080808f8, transparent);
+  /* Portfolio — gradients (LIGHT) */
+  --nav-gradient: linear-gradient(to bottom, #f5f5f5f8, transparent);
 
   /* Portfolio — typography scale */
   --size-nav-logo: 24px;
@@ -93,6 +92,7 @@
    DARK MODE OVERRIDES
 ───────────────────────────────────────────── */
 .dark {
+  /* shadcn primitives */
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);
@@ -124,12 +124,30 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+
+  /* Portfolio — backgrounds (DARK) */
+  --color-bg: #080808;
+  --color-bg-alt: #050505;
+  --color-bg-card: #0c0c0c;
+
+  /* Portfolio — strokes (DARK) */
+  --color-stroke: #161616;
+  --color-stroke-mid: #282828;
+  --color-stroke-subtle: #111111;
+
+  /* Portfolio — text (DARK) */
+  --color-text: #e8e8e8;
+  --color-text-muted: #cccccc;
+  --color-text-mid: #666666;
+  --color-text-dim: #333333;
+  --color-text-faint: #2e2e2e;
+
+  /* Portfolio — gradients (DARK) */
+  --nav-gradient: linear-gradient(to bottom, #080808f8, transparent);
 }
 
 /* ─────────────────────────────────────────────
    TAILWIND THEME
-   Registers tokens as Tailwind utilities
-   e.g. text-brand, bg-bg, font-bebas
 ───────────────────────────────────────────── */
 @theme inline {
   /* shadcn mappings */
@@ -269,11 +287,8 @@
 
 /* ─────────────────────────────────────────────
    COMPONENT CLASSES
-   Only for pseudo-selectors & multi-state logic
-   that Tailwind cannot express
 ───────────────────────────────────────────── */
 @layer components {
-  /* Shared layout pattern for brutalist bordered grids */
   .brutalist-card-grid {
     @apply grid gap-px bg-stroke-subtle border border-stroke-subtle;
   }
@@ -316,7 +331,7 @@
   align-items: center;
   gap: 10px;
   padding: 9px 0;
-  border-bottom: 1px solid var(--color-bg-alt);
+  border-bottom: 1px solid var(--color-stroke);
   font-size: 12px;
   color: var(--color-text-mid);
   letter-spacing: 0.03em;
@@ -390,7 +405,6 @@
 /* ─────────────────────────────────────────────
    GLITCH EFFECT
 ───────────────────────────────────────────── */
-
 .glitch {
   position: relative;
 }
@@ -417,7 +431,6 @@
 /* ─────────────────────────────────────────────
    SHINE EFFECT
 ───────────────────────────────────────────── */
-
 .btn-shine {
   position: relative;
   overflow: hidden;
