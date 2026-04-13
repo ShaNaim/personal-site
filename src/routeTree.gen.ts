@@ -9,75 +9,78 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as PortfolioSourceRouteImport } from './routes/portfolio-source'
 import { Route as ExamplesRouteImport } from './routes/examples'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as ClockRouteRouteImport } from './routes/clock/route'
+import { Route as PortfolioRouteRouteImport } from './routes/_portfolio/route'
 import { Route as ClockIndexRouteImport } from './routes/clock/index'
+import { Route as PortfolioIndexRouteImport } from './routes/_portfolio/index'
 
-const PortfolioSourceRoute = PortfolioSourceRouteImport.update({
-  id: '/portfolio-source',
-  path: '/portfolio-source',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ExamplesRoute = ExamplesRouteImport.update({
   id: '/examples',
   path: '/examples',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const ClockRouteRoute = ClockRouteRouteImport.update({
+  id: '/clock',
+  path: '/clock',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortfolioRouteRoute = PortfolioRouteRouteImport.update({
+  id: '/_portfolio',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ClockIndexRoute = ClockIndexRouteImport.update({
-  id: '/clock/',
-  path: '/clock/',
-  getParentRoute: () => rootRouteImport,
+  id: '/',
+  path: '/',
+  getParentRoute: () => ClockRouteRoute,
+} as any)
+const PortfolioIndexRoute = PortfolioIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PortfolioRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/': typeof PortfolioIndexRoute
+  '/clock': typeof ClockRouteRouteWithChildren
   '/examples': typeof ExamplesRoute
-  '/portfolio-source': typeof PortfolioSourceRoute
   '/clock/': typeof ClockIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
   '/examples': typeof ExamplesRoute
-  '/portfolio-source': typeof PortfolioSourceRoute
+  '/': typeof PortfolioIndexRoute
   '/clock': typeof ClockIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
+  '/_portfolio': typeof PortfolioRouteRouteWithChildren
+  '/clock': typeof ClockRouteRouteWithChildren
   '/examples': typeof ExamplesRoute
-  '/portfolio-source': typeof PortfolioSourceRoute
+  '/_portfolio/': typeof PortfolioIndexRoute
   '/clock/': typeof ClockIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/examples' | '/portfolio-source' | '/clock/'
+  fullPaths: '/' | '/clock' | '/examples' | '/clock/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/examples' | '/portfolio-source' | '/clock'
-  id: '__root__' | '/' | '/examples' | '/portfolio-source' | '/clock/'
+  to: '/examples' | '/' | '/clock'
+  id:
+    | '__root__'
+    | '/_portfolio'
+    | '/clock'
+    | '/examples'
+    | '/_portfolio/'
+    | '/clock/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  PortfolioRouteRoute: typeof PortfolioRouteRouteWithChildren
+  ClockRouteRoute: typeof ClockRouteRouteWithChildren
   ExamplesRoute: typeof ExamplesRoute
-  PortfolioSourceRoute: typeof PortfolioSourceRoute
-  ClockIndexRoute: typeof ClockIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/portfolio-source': {
-      id: '/portfolio-source'
-      path: '/portfolio-source'
-      fullPath: '/portfolio-source'
-      preLoaderRoute: typeof PortfolioSourceRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/examples': {
       id: '/examples'
       path: '/examples'
@@ -85,28 +88,65 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ExamplesRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
+    '/clock': {
+      id: '/clock'
+      path: '/clock'
+      fullPath: '/clock'
+      preLoaderRoute: typeof ClockRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_portfolio': {
+      id: '/_portfolio'
+      path: ''
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+      preLoaderRoute: typeof PortfolioRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/clock/': {
       id: '/clock/'
-      path: '/clock'
+      path: '/'
       fullPath: '/clock/'
       preLoaderRoute: typeof ClockIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof ClockRouteRoute
+    }
+    '/_portfolio/': {
+      id: '/_portfolio/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof PortfolioIndexRouteImport
+      parentRoute: typeof PortfolioRouteRoute
     }
   }
 }
 
-const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  ExamplesRoute: ExamplesRoute,
-  PortfolioSourceRoute: PortfolioSourceRoute,
+interface PortfolioRouteRouteChildren {
+  PortfolioIndexRoute: typeof PortfolioIndexRoute
+}
+
+const PortfolioRouteRouteChildren: PortfolioRouteRouteChildren = {
+  PortfolioIndexRoute: PortfolioIndexRoute,
+}
+
+const PortfolioRouteRouteWithChildren = PortfolioRouteRoute._addFileChildren(
+  PortfolioRouteRouteChildren,
+)
+
+interface ClockRouteRouteChildren {
+  ClockIndexRoute: typeof ClockIndexRoute
+}
+
+const ClockRouteRouteChildren: ClockRouteRouteChildren = {
   ClockIndexRoute: ClockIndexRoute,
+}
+
+const ClockRouteRouteWithChildren = ClockRouteRoute._addFileChildren(
+  ClockRouteRouteChildren,
+)
+
+const rootRouteChildren: RootRouteChildren = {
+  PortfolioRouteRoute: PortfolioRouteRouteWithChildren,
+  ClockRouteRoute: ClockRouteRouteWithChildren,
+  ExamplesRoute: ExamplesRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
