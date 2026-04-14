@@ -6,11 +6,13 @@ function cn(...inputs: ClassValue[]) {
 }
 
 interface SectionLabelProps {
-  label: string;
+  label?: string;
   className?: string; // Added for occasional margin/spacing adjustments
+  children?: React.ReactNode;
 }
 
-export function SectionLabel({ label, className }: SectionLabelProps) {
+export function SectionLabel({ label, className, children }: SectionLabelProps) {
+  const title = children ? children : label ? label : "";
   return (
     <div
       className={cn(
@@ -19,7 +21,7 @@ export function SectionLabel({ label, className }: SectionLabelProps) {
         className,
       )}
     >
-      {label}
+      {title}
     </div>
   );
 }
