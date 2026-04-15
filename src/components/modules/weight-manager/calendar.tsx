@@ -67,8 +67,8 @@ export function WeightCalendar({ onSelectDate }: WeightCalendarProps) {
           month_grid: "w-full border-collapse",
           weekdays: "grid grid-cols-7 mb-2",
           weekday: "text-zinc-500 font-normal text-[0.8rem] uppercase text-center",
-          weeks: "w-full",
-          week: "grid grid-cols-7 w-full mt-1",
+          weeks: "w-full flex flex-col gap-2",
+          week: "grid grid-cols-7 w-full mt-1 gap-3",
           day: "relative p-0 text-center text-sm focus-within:relative focus-within:z-20 aspect-square",
         }}
         components={{
