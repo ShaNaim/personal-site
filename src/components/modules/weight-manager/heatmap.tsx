@@ -3,15 +3,11 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { useWeightStore } from "@/hooks/use-weight-store";
 import { cn } from "@/lib/utils";
 
-const WEEKS = 26; // half-year view
+const WEEKS = 26;
 
-/**
- * Returns a CSS class based on how far the weight deviates from the
- * user's personal min/max range for the visible period.
- */
 function getIntensity(weight: number, min: number, max: number): string {
   if (min === max) return "opacity-60";
-  const ratio = (weight - min) / (max - min); // 0 = lightest, 1 = heaviest
+  const ratio = (weight - min) / (max - min);
   if (ratio < 0.25) return "opacity-30";
   if (ratio < 0.5) return "opacity-50";
   if (ratio < 0.75) return "opacity-70";
@@ -24,15 +20,12 @@ export function WeightHeatmap() {
   const today = new Date();
   const start = startOfWeek(subWeeks(today, WEEKS - 1), { weekStartsOn: 0 });
   const end = endOfWeek(today, { weekStartsOn: 0 });
-
   const allDays = eachDayOfInterval({ start, end });
 
-  // Determine weight range for intensity scale
   const weights = Object.values(entries);
   const minW = weights.length ? Math.min(...weights) : 0;
   const maxW = weights.length ? Math.max(...weights) : 0;
 
-  // Group days into weeks (columns)
   const weeks: Date[][] = [];
   let week: Date[] = [];
   allDays.forEach((day, i) => {
@@ -44,7 +37,6 @@ export function WeightHeatmap() {
   });
   if (week.length) weeks.push(week);
 
-  // Month labels: find where the month changes
   const monthLabels: { label: string; colIndex: number }[] = [];
   weeks.forEach((wk, i) => {
     const firstDay = wk[0];
@@ -57,31 +49,34 @@ export function WeightHeatmap() {
   });
 
   const DAY_LABELS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const totalCols = weeks.length;
 
   return (
     <TooltipProvider delayDuration={100}>
-      <div className="overflow-x-auto">
-        <div className="inline-flex flex-col gap-1 min-w-max">
-          {/* Month labels row */}
-          <div className="flex gap-1 pl-8">
-            {weeks.map((_, i) => {
-              const label = monthLabels.find((m) => m.colIndex === i);
-              return (
-                <div key={i} className="w-3 text-[10px] font-mono text-muted-foreground">
-                  {label?.label ?? ""}
-                </div>
-              );
-            })}
-          </div>
+      <div className="w-full">
+        {/* Month labels */}
+        <div className="flex w-full pl-8 mb-1">
+          {weeks.map((_, i) => {
+            const label = monthLabels.find((m) => m.colIndex === i);
+            return (
+              <div key={i} className="font-mono text-[10px] text-muted-foreground text-left truncate" style={{ width: `${100 / totalCols}%` }}>
+                {label?.label ?? ""}
+              </div>
+            );
+          })}
+        </div>
 
-          {/* Grid rows (Sun–Sat) */}
-          {DAY_LABELS.map((dayLabel, dayIndex) => (
-            <div key={dayLabel} className="flex items-center gap-1">
-              {/* Row label */}
-              <span className="w-7 text-right font-mono text-[10px] text-muted-foreground/60 select-none">{dayIndex % 2 === 1 ? dayLabel : ""}</span>
+        {/* Grid rows */}
+        {DAY_LABELS.map((dayLabel, dayIndex) => (
+          <div key={dayLabel} className="flex items-center w-full gap-0 mb-[3px]">
+            {/* Row label — fixed 2rem gutter */}
+            <span className="w-8 shrink-0 text-right pr-1 font-mono text-[10px] text-muted-foreground/60 select-none">{dayIndex % 2 === 1 ? dayLabel : ""}</span>
+
+            {/* Cells — flex-1 so they fill remaining width */}
+            <div className="flex flex-1 gap-[3px]">
               {weeks.map((wk, wi) => {
                 const day = wk.find((d) => getDay(d) === dayIndex);
-                if (!day) return <div key={wi} className="h-3 w-3" />;
+                if (!day) return <div key={wi} className="flex-1 aspect-square" />;
 
                 const dateKey = format(day, "yyyy-MM-dd");
                 const weight = entries[dateKey];
@@ -91,14 +86,14 @@ export function WeightHeatmap() {
                 return (
                   <Tooltip key={wi}>
                     <TooltipTrigger asChild>
-                      <div className={cn("h-3 w-3 rounded-[2px] cursor-default transition-all", future ? "bg-muted/30" : hasEntry ? cn("bg-brand", getIntensity(weight, minW, maxW)) : "bg-muted/60 hover:bg-muted")} />
+                      <div className={cn("flex-1 aspect-square rounded-[2px] cursor-default transition-all", future ? "bg-muted/30" : hasEntry ? cn("bg-brand", getIntensity(weight, minW, maxW)) : "bg-muted/60 hover:bg-muted")} />
                     </TooltipTrigger>
                     <TooltipContent side="top" className="font-mono text-xs">
                       <span className="text-muted-foreground">{format(day, "MMM d, yyyy")}</span>
                       {hasEntry && (
                         <>
-                          <span className="mx-1 text-muted-foreground/50">·</span>
-                          <span className="text-foreground">{weight.toFixed(1)} kg</span>
+                          <span className="mx-1 text-accent">·</span>
+                          <span className="text-muted-foreground">{weight.toFixed(1)} kg</span>
                         </>
                       )}
                       {!hasEntry && !future && (
@@ -112,8 +107,8 @@ export function WeightHeatmap() {
                 );
               })}
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
     </TooltipProvider>
   );

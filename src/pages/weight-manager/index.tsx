@@ -1,17 +1,31 @@
 import { useState } from "react";
 import { Scale } from "lucide-react";
-
+import { format, subDays, parseISO } from "date-fns";
 import { useWeightStore } from "@/hooks/use-weight-store";
 
 import { SectionLabel } from "@/components/common/section-label";
 import { Button } from "@/components/ui/button";
 
 import { WeightStats, WeightHeatmap, WeightInputDialog, WeightCalendar } from "@/components/modules/weight-manager";
+
 export function WeightManagerPage() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const { entries } = useWeightStore();
 
   const hasAnyEntry = Object.keys(entries).length > 0;
+
+  let streak = 0;
+  const today = format(new Date(), "yyyy-MM-dd");
+  const yesterday = format(subDays(new Date(), 1), "yyyy-MM-dd");
+  const startKey = entries[today] !== undefined ? today : entries[yesterday] !== undefined ? yesterday : null;
+
+  if (startKey) {
+    let cursor = parseISO(startKey);
+    while (entries[format(cursor, "yyyy-MM-dd")] !== undefined) {
+      streak++;
+      cursor = subDays(cursor, 1);
+    }
+  }
 
   return (
     <main className="mx-auto max-w-5xl px-4 py-16 sm:px-8">
@@ -55,11 +69,7 @@ export function WeightManagerPage() {
           <div className="rounded-lg border border-border/60 bg-muted/10 p-6">
             <WeightHeatmap />
             <div className="mt-4 flex items-center gap-2">
-              <span className="font-mono text-[10px] text-muted-foreground/60">Less</span>
-              {[30, 50, 70, 100].map((op) => (
-                <div key={op} className="h-3 w-3 rounded-[2px] bg-brand" style={{ opacity: op / 100 }} />
-              ))}
-              <span className="font-mono text-[10px] text-muted-foreground/60">More</span>
+              Streak :<span className="text-brand">{streak > 0 ? `${streak}d` : "0d"}</span>
             </div>
           </div>
         </section>

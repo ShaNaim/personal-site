@@ -1,5 +1,5 @@
 import * as React from "react";
-import { format, isFuture, isToday as isDateToday } from "date-fns";
+import { format, isFuture, isToday as isDateToday, isPast } from "date-fns";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { DayPicker } from "react-day-picker";
 
@@ -12,22 +12,48 @@ interface WeightCalendarProps {
 }
 
 export function WeightCalendar({ onSelectDate }: WeightCalendarProps) {
-  const [selected, setSelected] = React.useState<Date | undefined>(new Date());
+  const [selected, setSelected] = React.useState<Date | undefined>(undefined);
   const { entries } = useWeightStore();
 
-  const handleSelect = (date: Date | undefined) => {
-    setSelected(date);
-    if (date && onSelectDate) {
-      onSelectDate(date);
+  const handleClick = (date: Date, isDisabled: boolean, isOutside: boolean) => {
+    if (isDisabled || isOutside) return;
+
+    // Second click on already-selected date → open modal
+    if (selected && format(selected, "yyyy-MM-dd") === format(date, "yyyy-MM-dd")) {
+      onSelectDate?.(date);
+    } else {
+      // First click → just select
+      setSelected(date);
     }
   };
 
   return (
     <div className="w-full mx-auto bg-black p-4 rounded-xl border border-zinc-800">
+      {/* Legend */}
+      <div className="flex items-center gap-4 mb-4 px-2 flex-wrap">
+        <div className="flex items-center gap-1.5">
+          <div className="h-2.5 w-2.5 rounded-full bg-brand" />
+          <span className="text-[11px] font-mono text-zinc-500">today</span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <div className="h-2.5 w-2.5 rounded-full bg-zinc-100" />
+          <span className="text-[11px] font-mono text-zinc-500">past</span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <div className="h-2.5 w-2.5 rounded-full bg-zinc-700" />
+          <span className="text-[11px] font-mono text-zinc-500">future</span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <div className="h-2.5 w-2.5 rounded-sm bg-zinc-900 border border-zinc-700 ring-1 ring-brand/40" />
+          <span className="text-[11px] font-mono text-zinc-500">logged</span>
+        </div>
+        <span className="ml-auto text-[11px] font-mono text-zinc-600">tap once to select · tap again to log</span>
+      </div>
+
       <DayPicker
         mode="single"
         selected={selected}
-        onSelect={handleSelect}
+        onSelect={setSelected}
         disabled={(date) => isFuture(date) && !isDateToday(date)}
         showOutsideDays={true}
         className="m-0"
@@ -56,23 +82,72 @@ export function WeightCalendar({ onSelectDate }: WeightCalendarProps) {
             const isOutside = modifiers.outside;
             const isDisabled = modifiers.disabled;
             const isSelected = modifiers.selected;
+            const isToday = isDateToday(day.date);
+            const isFutureDate = isFuture(day.date) && !isToday;
+            const isPastDate = isPast(day.date) && !isToday;
 
             return (
               <button
                 {...props}
-                onClick={() => {
-                  if (!isDisabled && !isOutside) handleSelect(day.date);
-                }}
+                onClick={() => handleClick(day.date, !!isDisabled, !!isOutside)}
                 className={cn(
-                  "group relative h-full w-full flex flex-col items-center justify-center rounded-lg transition-all outline-none",
-                  "hover:bg-zinc-800/50 focus-visible:ring-1 focus-visible:ring-[#ff4500]",
+                  "group relative h-full w-full flex flex-col items-center justify-center gap-0.5 rounded-lg transition-all outline-none",
+
+                  // Base hover
+                  !isDisabled && !isOutside && "hover:bg-zinc-800/60 cursor-pointer",
+
+                  // Outside days
                   isOutside && "opacity-10 pointer-events-none",
+
+                  // Future days — dimmed
+                  isFutureDate && !isOutside && "opacity-30 cursor-not-allowed",
+
+                  // Has a weight entry
                   weight && !isOutside && "bg-zinc-900 border border-zinc-800",
-                  isSelected && "border-[#ff4500] ring-1 ring-[#ff4500]/30 bg-zinc-900/50",
+
+                  // Selected (first click)
+                  isSelected && !isToday && "ring-2 ring-zinc-400 bg-zinc-800/60",
+
+                  // Today
+                  isToday && "ring-2 ring-brand bg-brand/10",
+
+                  // Selected + today
+                  isSelected && isToday && "ring-2 ring-brand bg-brand/20",
                 )}
               >
-                <span className={cn("text-[13px] font-bold transition-colors", isOutside ? "text-zinc-700" : "text-zinc-100", isSelected && "text-[#ff4500]")}>{day.date.getDate()}</span>
-                {weight && !isOutside && <span className="text-[10px] font-mono text-[#ff4500] font-bold leading-none mt-1">{weight}kg</span>}
+                {/* Pulse dot for today */}
+                {isToday && (
+                  <span className="absolute top-1 right-1 flex h-1.5 w-1.5">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand opacity-75" />
+                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-brand" />
+                  </span>
+                )}
+
+                {/* Date number */}
+                <span
+                  className={cn(
+                    "text-[13px] font-bold leading-none transition-colors",
+                    isOutside && "text-zinc-700",
+                    isPastDate && !isOutside && !isSelected && "text-zinc-100",
+                    isFutureDate && "text-zinc-600",
+                    isToday && "text-brand",
+                    isSelected && !isToday && "text-white",
+                  )}
+                >
+                  {day.date.getDate()}
+                </span>
+
+                {/* Weight value */}
+                {weight && !isOutside ? (
+                  <span className="text-[10px] font-mono text-brand font-bold leading-none">{weight % 1 === 0 ? `${weight}` : weight.toFixed(1)}kg</span>
+                ) : (
+                  // Reserve height so all cells are same size
+                  <span className="text-[10px] leading-none opacity-0 select-none">0</span>
+                )}
+
+                {/* "tap again" hint on selected dates */}
+                {isSelected && !weight && <span className="absolute bottom-1 left-0 right-0 text-center text-[8px] font-mono text-zinc-500 leading-none">tap to log</span>}
+                {isSelected && weight && <span className="absolute bottom-1 left-0 right-0 text-center text-[8px] font-mono text-zinc-500 leading-none">tap to edit</span>}
               </button>
             );
           },
