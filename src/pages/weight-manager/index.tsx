@@ -7,6 +7,7 @@ import { SectionLabel } from "@/components/common/section-label";
 import { Button } from "@/components/ui/button";
 
 import { WeightStats, WeightHeatmap, WeightInputDialog, WeightCalendar } from "@/components/modules/weight-manager";
+import { WeightChart } from "@/components/modules/weight-manager/weight-chart";
 
 export function WeightManagerPage() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -44,7 +45,7 @@ export function WeightManagerPage() {
 
       {/* Stats strip */}
       {hasAnyEntry && (
-        <section className="mb-12 rounded-lg border border-border/60 bg-muted/20 p-6">
+        <section className="mb-12 rounded-lg  bg-muted/20 p-6">
           <WeightStats />
         </section>
       )}
@@ -54,11 +55,23 @@ export function WeightManagerPage() {
         <div className="mb-4">
           <SectionLabel>Calendar</SectionLabel>
         </div>
-        <div className="overflow-x-auto rounded-lg border border-border/60">
+        <div className="overflow-x-auto rounded-lg ">
           <WeightCalendar onSelectDate={setSelectedDate} />
         </div>
         <p className="mt-3 font-mono text-[11px] text-muted-foreground/60">Logged weights appear beneath each date. Click any past date to add or edit.</p>
       </section>
+
+      {/* Chart */}
+      {hasAnyEntry && (
+        <section className="mb-12">
+          <div className="mb-4">
+            <SectionLabel>Progress</SectionLabel>
+          </div>
+          <div className="rounded-lg  bg-muted/10 p-6">
+            <WeightChart />
+          </div>
+        </section>
+      )}
 
       {/* Heatmap */}
       {hasAnyEntry && (
@@ -66,7 +79,7 @@ export function WeightManagerPage() {
           <div className="mb-4">
             <SectionLabel>26-week activity</SectionLabel>
           </div>
-          <div className="rounded-lg border border-border/60 bg-muted/10 p-6">
+          <div className="rounded-lg  bg-muted/10 p-6">
             <WeightHeatmap />
             <div className="mt-4 flex items-center gap-2">
               Streak :<span className="text-brand">{streak > 0 ? `${streak}d` : "0d"}</span>
@@ -78,7 +91,7 @@ export function WeightManagerPage() {
       {/* Empty state */}
       {!hasAnyEntry && (
         <div className="flex flex-col items-center gap-4 py-16 text-center">
-          <div className="flex h-14 w-14 items-center justify-center rounded-full border border-border/60 bg-muted/20">
+          <div className="flex h-14 w-14 items-center justify-center rounded-full  bg-muted/20">
             <Scale className="h-6 w-6 text-muted-foreground/60" />
           </div>
           <div>
