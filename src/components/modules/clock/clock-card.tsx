@@ -18,7 +18,7 @@ export const ClockCard = memo(function ClockCard({ entry }: ClockCardProps) {
     <>
       <div
         onClick={() => setModalOpen(true)}
-        className="group relative rounded-xl cursor-none transition-all duration-300"
+        className="group relative rounded-xl cursor-pointer transition-all duration-300"
         style={{
           background: "rgba(255, 255, 255, 0.03)",
           backdropFilter: "blur(2px)",

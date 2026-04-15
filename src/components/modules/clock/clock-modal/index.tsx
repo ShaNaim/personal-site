@@ -44,7 +44,7 @@ export function ClockModal({ entry, onClose }: ClockModalProps) {
   });
 
   return (
-    <div ref={overlayRef} onClick={(e) => e.target === overlayRef.current && onClose()} className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+    <div ref={overlayRef} onClick={(e) => e.target === overlayRef.current && onClose()} className="fixed inset-0 z-100 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
       <div className="relative w-full max-w-lg bg-bg-card border border-stroke rounded-sm overflow-hidden">
         {/* Header */}
         <div className="flex items-start justify-between p-6 border-b border-stroke">

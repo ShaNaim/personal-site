@@ -1,7 +1,14 @@
+import { useEffect } from "react";
 import { useCursor } from "@/hooks/use-cursor";
 
 export function CursorOverlay() {
   const { dotRef, ringRef } = useCursor();
+
+  useEffect(() => {
+    document.body.classList.add("cursor-none");
+    return () => document.body.classList.remove("cursor-none");
+  }, []);
+
   return (
     <>
       <div ref={dotRef} className="fixed top-0 left-0 w-2 h-2 rounded-full bg-(--color-brand) pointer-events-none z-9999 will-change-transform" />
