@@ -1,158 +1,223 @@
 import * as React from "react";
-import { format, isFuture, isToday as isDateToday, isPast } from "date-fns";
+import {
+  format,
+  isFuture,
+  isToday as isDateToday,
+  isSameMonth,
+  startOfMonth,
+  endOfMonth,
+  startOfWeek,
+  endOfWeek,
+  eachDayOfInterval,
+  addMonths,
+  subMonths,
+  getYear,
+  getMonth,
+} from "date-fns";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { DayPicker } from "react-day-picker";
-
 import { cn } from "@/lib/utils";
-import { buttonVariants } from "@/components/ui/button";
 import { useWeightStore } from "@/hooks/use-weight-store";
+
+const DAY_HEADERS = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+const MONTHS = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+const CURRENT_YEAR = new Date().getFullYear();
+const YEARS = Array.from({ length: CURRENT_YEAR - 2019 }, (_, i) => 2020 + i);
 
 interface WeightCalendarProps {
   onSelectDate?: (date: Date) => void;
 }
 
 export function WeightCalendar({ onSelectDate }: WeightCalendarProps) {
-  const [selected, setSelected] = React.useState<Date | undefined>(undefined);
+  const [viewMonth, setViewMonth] = React.useState(new Date());
   const { entries } = useWeightStore();
 
-  const handleClick = (date: Date, isDisabled: boolean, isOutside: boolean) => {
-    if (isDisabled || isOutside) return;
+  const monthStart = startOfMonth(viewMonth);
+  const monthEnd = endOfMonth(viewMonth);
+  const calStart = startOfWeek(monthStart, { weekStartsOn: 0 });
+  const calEnd = endOfWeek(monthEnd, { weekStartsOn: 0 });
+  const allDays = eachDayOfInterval({ start: calStart, end: calEnd });
 
-    // Second click on already-selected date → open modal
-    if (selected && format(selected, "yyyy-MM-dd") === format(date, "yyyy-MM-dd")) {
-      onSelectDate?.(date);
-    } else {
-      // First click → just select
-      setSelected(date);
-    }
+  const handlePrev = () => setViewMonth((m) => subMonths(m, 1));
+  const handleNext = () => setViewMonth((m) => addMonths(m, 1));
+  const handleToday = () => setViewMonth(new Date());
+
+  const handleYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setViewMonth((m) => {
+      const d = new Date(m);
+      d.setFullYear(parseInt(e.target.value));
+      return d;
+    });
+  };
+
+  const handleMonthChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setViewMonth((m) => {
+      const d = new Date(m);
+      d.setMonth(parseInt(e.target.value));
+      return d;
+    });
   };
 
   return (
-    <div className="w-full mx-auto bg-black p-4 rounded-xl border border-zinc-800">
-      {/* Legend */}
-      <div className="flex items-center gap-4 mb-4 px-2 flex-wrap">
-        <div className="flex items-center gap-1.5">
-          <div className="h-2.5 w-2.5 rounded-full bg-brand" />
-          <span className="text-[11px] font-mono text-zinc-500">today</span>
+    <div className="border border-stroke">
+      {/* ── HEADER ─────────────────────────────────── */}
+      <div className="flex items-center justify-between border-b border-stroke px-6 py-4">
+        <div className="flex items-baseline gap-3">
+          <h2 className="font-['Bebas_Neue'] text-[40px] leading-none tracking-wider text-[var(--color-text)] uppercase sm:text-[52px]">
+            {format(viewMonth, "MMMM")}
+          </h2>
+
+          {/* Year dropdown */}
+          <select
+            value={getYear(viewMonth)}
+            onChange={handleYearChange}
+            className="cursor-none bg-transparent font-mono text-sm text-[var(--color-text-muted)] border-none outline-none appearance-none hover:text-[var(--color-brand)] transition-colors"
+          >
+            {YEARS.map((y) => (
+              <option key={y} value={y} className="bg-[var(--color-bg)] text-[var(--color-text)]">
+                {y}
+              </option>
+            ))}
+          </select>
+
+          {/* Month dropdown */}
+          <select
+            value={getMonth(viewMonth)}
+            onChange={handleMonthChange}
+            className="cursor-none bg-transparent font-mono text-[10px] uppercase tracking-widest text-[var(--color-text-muted)] border-none outline-none appearance-none hover:text-[var(--color-brand)] transition-colors"
+          >
+            {MONTHS.map((m, i) => (
+              <option key={m} value={i} className="bg-[var(--color-bg)] text-[var(--color-text)]">
+                {m}
+              </option>
+            ))}
+          </select>
         </div>
-        <div className="flex items-center gap-1.5">
-          <div className="h-2.5 w-2.5 rounded-full bg-zinc-100" />
-          <span className="text-[11px] font-mono text-zinc-500">past</span>
+
+        <div className="flex items-center gap-1">
+          <button
+            onClick={handlePrev}
+            className="cursor-none flex h-8 w-8 items-center justify-center border border-stroke text-[var(--color-text-muted)] hover:border-[var(--color-brand)] hover:text-[var(--color-brand)] transition-all"
+            aria-label="Previous month"
+          >
+            <ChevronLeft className="h-3.5 w-3.5" />
+          </button>
+          <button
+            onClick={handleToday}
+            className="cursor-none h-8 px-4 font-mono text-[9px] uppercase tracking-[0.2em] text-[var(--color-text-muted)] border border-stroke hover:border-[var(--color-brand)] hover:text-[var(--color-brand)] transition-all"
+          >
+            Today
+          </button>
+          <button
+            onClick={handleNext}
+            className="cursor-none flex h-8 w-8 items-center justify-center border border-stroke text-[var(--color-text-muted)] hover:border-[var(--color-brand)] hover:text-[var(--color-brand)] transition-all"
+            aria-label="Next month"
+          >
+            <ChevronRight className="h-3.5 w-3.5" />
+          </button>
         </div>
-        <div className="flex items-center gap-1.5">
-          <div className="h-2.5 w-2.5 rounded-full bg-zinc-700" />
-          <span className="text-[11px] font-mono text-zinc-500">future</span>
-        </div>
-        <div className="flex items-center gap-1.5">
-          <div className="h-2.5 w-2.5 rounded-sm bg-zinc-900 border border-zinc-700 ring-1 ring-brand/40" />
-          <span className="text-[11px] font-mono text-zinc-500">logged</span>
-        </div>
-        <span className="ml-auto text-[11px] font-mono text-zinc-600">tap once to select · tap again to log</span>
       </div>
 
-      <DayPicker
-        mode="single"
-        selected={selected}
-        onSelect={setSelected}
-        disabled={(date) => isFuture(date) && !isDateToday(date)}
-        showOutsideDays={true}
-        className="m-0"
-        classNames={{
-          months: "w-full",
-          month: "w-full space-y-4",
-          caption: "flex justify-between pt-1 relative items-center mb-4 px-2",
-          caption_label: "text-sm font-mono text-white font-bold",
-          nav: "flex items-center gap-1",
-          nav_button: cn(buttonVariants({ variant: "outline" }), "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100 border-zinc-700 text-white"),
-          month_grid: "w-full border-collapse",
-          weekdays: "grid grid-cols-7 mb-2",
-          weekday: "text-zinc-500 font-normal text-[0.8rem] uppercase text-center",
-          weeks: "w-full flex flex-col gap-2",
-          week: "grid grid-cols-7 w-full mt-1 gap-3",
-          day: "relative p-0 text-center text-sm focus-within:relative focus-within:z-20 aspect-square",
-        }}
-        components={{
-          Chevron: ({ orientation }) => {
-            const Icon = orientation === "left" ? ChevronLeft : ChevronRight;
-            return <Icon className="h-4 w-4" />;
-          },
-          DayButton: ({ day, modifiers, ...props }) => {
-            const dateKey = format(day.date, "yyyy-MM-dd");
-            const weight = entries[dateKey];
-            const isOutside = modifiers.outside;
-            const isDisabled = modifiers.disabled;
-            const isSelected = modifiers.selected;
-            const isToday = isDateToday(day.date);
-            const isFutureDate = isFuture(day.date) && !isToday;
-            const isPastDate = isPast(day.date) && !isToday;
+      {/* ── DAY HEADERS ───────────────────────────── */}
+      <div className="grid grid-cols-7 border-b border-stroke bg-[var(--color-bg-alt)]">
+        {DAY_HEADERS.map((d, i) => (
+          <div
+            key={d}
+            className={cn(
+              "py-2.5 text-center font-mono text-[9px] uppercase tracking-[0.25em] text-[var(--color-text-muted)]",
+              i < 6 && "border-r border-stroke",
+            )}
+          >
+            {d}
+          </div>
+        ))}
+      </div>
 
-            return (
-              <button
-                {...props}
-                onClick={() => handleClick(day.date, !!isDisabled, !!isOutside)}
+      {/* ── CALENDAR GRID ─────────────────────────── */}
+      <div className="grid grid-cols-7">
+        {allDays.map((day, i) => {
+          const dateKey = format(day, "yyyy-MM-dd");
+          const weight = entries[dateKey];
+          const isCurrentMonth = isSameMonth(day, viewMonth);
+          const isToday = isDateToday(day);
+          const isFutureDay = isFuture(day) && !isToday;
+          const isClickable = isCurrentMonth && !isFutureDay;
+          const hasWeight = weight !== undefined;
+
+          const isLastCol = (i + 1) % 7 === 0;
+          const isLastRow = i >= allDays.length - 7;
+
+          return (
+            <button
+              key={dateKey}
+              onClick={() => isClickable && onSelectDate?.(day)}
+              disabled={!isClickable}
+              className={cn(
+                "group relative flex flex-col justify-between p-2 sm:p-3 h-[72px] sm:h-24 text-left transition-all duration-150",
+                !isLastCol && "border-r border-stroke",
+                !isLastRow && "border-b border-stroke",
+
+                // Background states
+                !isCurrentMonth && "bg-[var(--color-bg-alt)] opacity-30 pointer-events-none",
+                isCurrentMonth && !hasWeight && !isToday && isFutureDay && "opacity-30 pointer-events-none",
+                hasWeight && isCurrentMonth && "bg-[var(--color-brand-dim)]",
+                isToday && "bg-[var(--color-brand-dim)]",
+
+                // Interactions
+                isClickable && "cursor-none hover:bg-[var(--color-brand-dim)]",
+              )}
+            >
+              {/* Today corner triangle */}
+              {isToday && (
+                <div
+                  className="absolute top-0 left-0 h-0 w-0 pointer-events-none"
+                  style={{
+                    borderTop: "20px solid var(--color-brand)",
+                    borderRight: "20px solid transparent",
+                  }}
+                />
+              )}
+
+              {/* Logged dot */}
+              {hasWeight && isCurrentMonth && !isToday && (
+                <div className="absolute top-2 left-2 h-1.5 w-1.5 rounded-full bg-[var(--color-brand)] opacity-60" />
+              )}
+
+              {/* Date number */}
+              <span
                 className={cn(
-                  "group relative h-full w-full flex flex-col items-center justify-center gap-0.5 rounded-lg transition-all outline-none",
-
-                  // Base hover
-                  !isDisabled && !isOutside && "hover:bg-zinc-800/60 cursor-pointer",
-
-                  // Outside days
-                  isOutside && "opacity-10 pointer-events-none",
-
-                  // Future days — dimmed
-                  isFutureDate && !isOutside && "opacity-30 cursor-not-allowed",
-
-                  // Has a weight entry
-                  weight && !isOutside && "bg-zinc-900 border border-zinc-800",
-
-                  // Selected (first click)
-                  isSelected && !isToday && "ring-2 ring-zinc-400 bg-zinc-800/60",
-
-                  // Today
-                  isToday && "ring-2 ring-brand bg-brand/10",
-
-                  // Selected + today
-                  isSelected && isToday && "ring-2 ring-brand bg-brand/20",
+                  "font-mono text-xs font-bold leading-none sm:text-sm",
+                  isToday ? "text-[var(--color-brand)] pl-4" : "text-[var(--color-text-muted)]",
+                  hasWeight && !isToday && isCurrentMonth && "text-[var(--color-text)]",
                 )}
               >
-                {/* Pulse dot for today */}
-                {isToday && (
-                  <span className="absolute top-1 right-1 flex h-1.5 w-1.5">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand opacity-75" />
-                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-brand" />
-                  </span>
-                )}
+                {format(day, "d")}
+              </span>
 
-                {/* Date number */}
+              {/* Weight value */}
+              {hasWeight && isCurrentMonth && (
+                <div className="flex items-baseline gap-0.5 leading-none">
+                  <span className="font-['Bebas_Neue'] text-lg text-[var(--color-brand)] sm:text-2xl leading-none">
+                    {weight % 1 === 0 ? weight : weight.toFixed(1)}
+                  </span>
+                  <span className="font-mono text-[9px] text-[var(--color-brand)] opacity-60 uppercase">kg</span>
+                </div>
+              )}
+
+              {/* Hover hint */}
+              {isClickable && (
                 <span
                   className={cn(
-                    "text-[13px] font-bold leading-none transition-colors",
-                    isOutside && "text-zinc-700",
-                    isPastDate && !isOutside && !isSelected && "text-zinc-100",
-                    isFutureDate && "text-zinc-600",
-                    isToday && "text-brand",
-                    isSelected && !isToday && "text-white",
+                    "absolute bottom-1.5 right-2 font-mono text-[8px] uppercase tracking-widest opacity-0 transition-opacity group-hover:opacity-100",
+                    hasWeight ? "text-[var(--color-brand)]" : "text-[var(--color-text-dim)]",
                   )}
                 >
-                  {day.date.getDate()}
+                  {hasWeight ? "edit" : "+ log"}
                 </span>
-
-                {/* Weight value */}
-                {weight && !isOutside ? (
-                  <span className="text-[10px] font-mono text-brand font-bold leading-none">{weight % 1 === 0 ? `${weight}` : weight.toFixed(1)}kg</span>
-                ) : (
-                  // Reserve height so all cells are same size
-                  <span className="text-[10px] leading-none opacity-0 select-none">0</span>
-                )}
-
-                {/* "tap again" hint on selected dates */}
-                {isSelected && !weight && <span className="absolute bottom-1 left-0 right-0 text-center text-[8px] font-mono text-zinc-500 leading-none">tap to log</span>}
-                {isSelected && weight && <span className="absolute bottom-1 left-0 right-0 text-center text-[8px] font-mono text-zinc-500 leading-none">tap to edit</span>}
-              </button>
-            );
-          },
-        }}
-      />
+              )}
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 }

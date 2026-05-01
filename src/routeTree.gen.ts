@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ExamplesRouteImport } from './routes/examples'
+import { Route as WeightRouteRouteImport } from './routes/weight/route'
 import { Route as ClockRouteRouteImport } from './routes/clock/route'
 import { Route as PortfolioRouteRouteImport } from './routes/_portfolio/route'
 import { Route as WeightIndexRouteImport } from './routes/weight/index'
@@ -19,6 +20,11 @@ import { Route as PortfolioIndexRouteImport } from './routes/_portfolio/index'
 const ExamplesRoute = ExamplesRouteImport.update({
   id: '/examples',
   path: '/examples',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WeightRouteRoute = WeightRouteRouteImport.update({
+  id: '/weight',
+  path: '/weight',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ClockRouteRoute = ClockRouteRouteImport.update({
@@ -31,9 +37,9 @@ const PortfolioRouteRoute = PortfolioRouteRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const WeightIndexRoute = WeightIndexRouteImport.update({
-  id: '/weight/',
-  path: '/weight/',
-  getParentRoute: () => rootRouteImport,
+  id: '/',
+  path: '/',
+  getParentRoute: () => WeightRouteRoute,
 } as any)
 const ClockIndexRoute = ClockIndexRouteImport.update({
   id: '/',
@@ -49,6 +55,7 @@ const PortfolioIndexRoute = PortfolioIndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof PortfolioIndexRoute
   '/clock': typeof ClockRouteRouteWithChildren
+  '/weight': typeof WeightRouteRouteWithChildren
   '/examples': typeof ExamplesRoute
   '/clock/': typeof ClockIndexRoute
   '/weight/': typeof WeightIndexRoute
@@ -63,6 +70,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_portfolio': typeof PortfolioRouteRouteWithChildren
   '/clock': typeof ClockRouteRouteWithChildren
+  '/weight': typeof WeightRouteRouteWithChildren
   '/examples': typeof ExamplesRoute
   '/_portfolio/': typeof PortfolioIndexRoute
   '/clock/': typeof ClockIndexRoute
@@ -70,13 +78,14 @@ export interface FileRoutesById {
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/clock' | '/examples' | '/clock/' | '/weight/'
+  fullPaths: '/' | '/clock' | '/weight' | '/examples' | '/clock/' | '/weight/'
   fileRoutesByTo: FileRoutesByTo
   to: '/examples' | '/' | '/clock' | '/weight'
   id:
     | '__root__'
     | '/_portfolio'
     | '/clock'
+    | '/weight'
     | '/examples'
     | '/_portfolio/'
     | '/clock/'
@@ -86,8 +95,8 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   PortfolioRouteRoute: typeof PortfolioRouteRouteWithChildren
   ClockRouteRoute: typeof ClockRouteRouteWithChildren
+  WeightRouteRoute: typeof WeightRouteRouteWithChildren
   ExamplesRoute: typeof ExamplesRoute
-  WeightIndexRoute: typeof WeightIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -97,6 +106,13 @@ declare module '@tanstack/react-router' {
       path: '/examples'
       fullPath: '/examples'
       preLoaderRoute: typeof ExamplesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/weight': {
+      id: '/weight'
+      path: '/weight'
+      fullPath: '/weight'
+      preLoaderRoute: typeof WeightRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/clock': {
@@ -115,10 +131,10 @@ declare module '@tanstack/react-router' {
     }
     '/weight/': {
       id: '/weight/'
-      path: '/weight'
+      path: '/'
       fullPath: '/weight/'
       preLoaderRoute: typeof WeightIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof WeightRouteRoute
     }
     '/clock/': {
       id: '/clock/'
@@ -161,11 +177,23 @@ const ClockRouteRouteWithChildren = ClockRouteRoute._addFileChildren(
   ClockRouteRouteChildren,
 )
 
+interface WeightRouteRouteChildren {
+  WeightIndexRoute: typeof WeightIndexRoute
+}
+
+const WeightRouteRouteChildren: WeightRouteRouteChildren = {
+  WeightIndexRoute: WeightIndexRoute,
+}
+
+const WeightRouteRouteWithChildren = WeightRouteRoute._addFileChildren(
+  WeightRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   PortfolioRouteRoute: PortfolioRouteRouteWithChildren,
   ClockRouteRoute: ClockRouteRouteWithChildren,
+  WeightRouteRoute: WeightRouteRouteWithChildren,
   ExamplesRoute: ExamplesRoute,
-  WeightIndexRoute: WeightIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
