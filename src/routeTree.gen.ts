@@ -11,11 +11,17 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ExamplesRouteImport } from './routes/examples'
 import { Route as WeightRouteRouteImport } from './routes/weight/route'
+import { Route as FinanceRouteRouteImport } from './routes/finance/route'
 import { Route as ClockRouteRouteImport } from './routes/clock/route'
 import { Route as PortfolioRouteRouteImport } from './routes/_portfolio/route'
 import { Route as WeightIndexRouteImport } from './routes/weight/index'
+import { Route as FinanceIndexRouteImport } from './routes/finance/index'
 import { Route as ClockIndexRouteImport } from './routes/clock/index'
 import { Route as PortfolioIndexRouteImport } from './routes/_portfolio/index'
+import { Route as FinanceCategoriesRouteRouteImport } from './routes/finance/categories/route'
+import { Route as FinanceBudgetRouteRouteImport } from './routes/finance/budget/route'
+import { Route as FinanceCategoriesIndexRouteImport } from './routes/finance/categories/index'
+import { Route as FinanceBudgetIndexRouteImport } from './routes/finance/budget/index'
 
 const ExamplesRoute = ExamplesRouteImport.update({
   id: '/examples',
@@ -25,6 +31,11 @@ const ExamplesRoute = ExamplesRouteImport.update({
 const WeightRouteRoute = WeightRouteRouteImport.update({
   id: '/weight',
   path: '/weight',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FinanceRouteRoute = FinanceRouteRouteImport.update({
+  id: '/finance',
+  path: '/finance',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ClockRouteRoute = ClockRouteRouteImport.update({
@@ -41,6 +52,11 @@ const WeightIndexRoute = WeightIndexRouteImport.update({
   path: '/',
   getParentRoute: () => WeightRouteRoute,
 } as any)
+const FinanceIndexRoute = FinanceIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => FinanceRouteRoute,
+} as any)
 const ClockIndexRoute = ClockIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -51,50 +67,111 @@ const PortfolioIndexRoute = PortfolioIndexRouteImport.update({
   path: '/',
   getParentRoute: () => PortfolioRouteRoute,
 } as any)
+const FinanceCategoriesRouteRoute = FinanceCategoriesRouteRouteImport.update({
+  id: '/categories',
+  path: '/categories',
+  getParentRoute: () => FinanceRouteRoute,
+} as any)
+const FinanceBudgetRouteRoute = FinanceBudgetRouteRouteImport.update({
+  id: '/budget',
+  path: '/budget',
+  getParentRoute: () => FinanceRouteRoute,
+} as any)
+const FinanceCategoriesIndexRoute = FinanceCategoriesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => FinanceCategoriesRouteRoute,
+} as any)
+const FinanceBudgetIndexRoute = FinanceBudgetIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => FinanceBudgetRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof PortfolioIndexRoute
   '/clock': typeof ClockRouteRouteWithChildren
+  '/finance': typeof FinanceRouteRouteWithChildren
   '/weight': typeof WeightRouteRouteWithChildren
   '/examples': typeof ExamplesRoute
+  '/finance/budget': typeof FinanceBudgetRouteRouteWithChildren
+  '/finance/categories': typeof FinanceCategoriesRouteRouteWithChildren
   '/clock/': typeof ClockIndexRoute
+  '/finance/': typeof FinanceIndexRoute
   '/weight/': typeof WeightIndexRoute
+  '/finance/budget/': typeof FinanceBudgetIndexRoute
+  '/finance/categories/': typeof FinanceCategoriesIndexRoute
 }
 export interface FileRoutesByTo {
   '/examples': typeof ExamplesRoute
   '/': typeof PortfolioIndexRoute
   '/clock': typeof ClockIndexRoute
+  '/finance': typeof FinanceIndexRoute
   '/weight': typeof WeightIndexRoute
+  '/finance/budget': typeof FinanceBudgetIndexRoute
+  '/finance/categories': typeof FinanceCategoriesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_portfolio': typeof PortfolioRouteRouteWithChildren
   '/clock': typeof ClockRouteRouteWithChildren
+  '/finance': typeof FinanceRouteRouteWithChildren
   '/weight': typeof WeightRouteRouteWithChildren
   '/examples': typeof ExamplesRoute
+  '/finance/budget': typeof FinanceBudgetRouteRouteWithChildren
+  '/finance/categories': typeof FinanceCategoriesRouteRouteWithChildren
   '/_portfolio/': typeof PortfolioIndexRoute
   '/clock/': typeof ClockIndexRoute
+  '/finance/': typeof FinanceIndexRoute
   '/weight/': typeof WeightIndexRoute
+  '/finance/budget/': typeof FinanceBudgetIndexRoute
+  '/finance/categories/': typeof FinanceCategoriesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/clock' | '/weight' | '/examples' | '/clock/' | '/weight/'
+  fullPaths:
+    | '/'
+    | '/clock'
+    | '/finance'
+    | '/weight'
+    | '/examples'
+    | '/finance/budget'
+    | '/finance/categories'
+    | '/clock/'
+    | '/finance/'
+    | '/weight/'
+    | '/finance/budget/'
+    | '/finance/categories/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/examples' | '/' | '/clock' | '/weight'
+  to:
+    | '/examples'
+    | '/'
+    | '/clock'
+    | '/finance'
+    | '/weight'
+    | '/finance/budget'
+    | '/finance/categories'
   id:
     | '__root__'
     | '/_portfolio'
     | '/clock'
+    | '/finance'
     | '/weight'
     | '/examples'
+    | '/finance/budget'
+    | '/finance/categories'
     | '/_portfolio/'
     | '/clock/'
+    | '/finance/'
     | '/weight/'
+    | '/finance/budget/'
+    | '/finance/categories/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   PortfolioRouteRoute: typeof PortfolioRouteRouteWithChildren
   ClockRouteRoute: typeof ClockRouteRouteWithChildren
+  FinanceRouteRoute: typeof FinanceRouteRouteWithChildren
   WeightRouteRoute: typeof WeightRouteRouteWithChildren
   ExamplesRoute: typeof ExamplesRoute
 }
@@ -113,6 +190,13 @@ declare module '@tanstack/react-router' {
       path: '/weight'
       fullPath: '/weight'
       preLoaderRoute: typeof WeightRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/finance': {
+      id: '/finance'
+      path: '/finance'
+      fullPath: '/finance'
+      preLoaderRoute: typeof FinanceRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/clock': {
@@ -136,6 +220,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WeightIndexRouteImport
       parentRoute: typeof WeightRouteRoute
     }
+    '/finance/': {
+      id: '/finance/'
+      path: '/'
+      fullPath: '/finance/'
+      preLoaderRoute: typeof FinanceIndexRouteImport
+      parentRoute: typeof FinanceRouteRoute
+    }
     '/clock/': {
       id: '/clock/'
       path: '/'
@@ -149,6 +240,34 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof PortfolioIndexRouteImport
       parentRoute: typeof PortfolioRouteRoute
+    }
+    '/finance/categories': {
+      id: '/finance/categories'
+      path: '/categories'
+      fullPath: '/finance/categories'
+      preLoaderRoute: typeof FinanceCategoriesRouteRouteImport
+      parentRoute: typeof FinanceRouteRoute
+    }
+    '/finance/budget': {
+      id: '/finance/budget'
+      path: '/budget'
+      fullPath: '/finance/budget'
+      preLoaderRoute: typeof FinanceBudgetRouteRouteImport
+      parentRoute: typeof FinanceRouteRoute
+    }
+    '/finance/categories/': {
+      id: '/finance/categories/'
+      path: '/'
+      fullPath: '/finance/categories/'
+      preLoaderRoute: typeof FinanceCategoriesIndexRouteImport
+      parentRoute: typeof FinanceCategoriesRouteRoute
+    }
+    '/finance/budget/': {
+      id: '/finance/budget/'
+      path: '/'
+      fullPath: '/finance/budget/'
+      preLoaderRoute: typeof FinanceBudgetIndexRouteImport
+      parentRoute: typeof FinanceBudgetRouteRoute
     }
   }
 }
@@ -177,6 +296,47 @@ const ClockRouteRouteWithChildren = ClockRouteRoute._addFileChildren(
   ClockRouteRouteChildren,
 )
 
+interface FinanceBudgetRouteRouteChildren {
+  FinanceBudgetIndexRoute: typeof FinanceBudgetIndexRoute
+}
+
+const FinanceBudgetRouteRouteChildren: FinanceBudgetRouteRouteChildren = {
+  FinanceBudgetIndexRoute: FinanceBudgetIndexRoute,
+}
+
+const FinanceBudgetRouteRouteWithChildren =
+  FinanceBudgetRouteRoute._addFileChildren(FinanceBudgetRouteRouteChildren)
+
+interface FinanceCategoriesRouteRouteChildren {
+  FinanceCategoriesIndexRoute: typeof FinanceCategoriesIndexRoute
+}
+
+const FinanceCategoriesRouteRouteChildren: FinanceCategoriesRouteRouteChildren =
+  {
+    FinanceCategoriesIndexRoute: FinanceCategoriesIndexRoute,
+  }
+
+const FinanceCategoriesRouteRouteWithChildren =
+  FinanceCategoriesRouteRoute._addFileChildren(
+    FinanceCategoriesRouteRouteChildren,
+  )
+
+interface FinanceRouteRouteChildren {
+  FinanceBudgetRouteRoute: typeof FinanceBudgetRouteRouteWithChildren
+  FinanceCategoriesRouteRoute: typeof FinanceCategoriesRouteRouteWithChildren
+  FinanceIndexRoute: typeof FinanceIndexRoute
+}
+
+const FinanceRouteRouteChildren: FinanceRouteRouteChildren = {
+  FinanceBudgetRouteRoute: FinanceBudgetRouteRouteWithChildren,
+  FinanceCategoriesRouteRoute: FinanceCategoriesRouteRouteWithChildren,
+  FinanceIndexRoute: FinanceIndexRoute,
+}
+
+const FinanceRouteRouteWithChildren = FinanceRouteRoute._addFileChildren(
+  FinanceRouteRouteChildren,
+)
+
 interface WeightRouteRouteChildren {
   WeightIndexRoute: typeof WeightIndexRoute
 }
@@ -192,6 +352,7 @@ const WeightRouteRouteWithChildren = WeightRouteRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   PortfolioRouteRoute: PortfolioRouteRouteWithChildren,
   ClockRouteRoute: ClockRouteRouteWithChildren,
+  FinanceRouteRoute: FinanceRouteRouteWithChildren,
   WeightRouteRoute: WeightRouteRouteWithChildren,
   ExamplesRoute: ExamplesRoute,
 }
